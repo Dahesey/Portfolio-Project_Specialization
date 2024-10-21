@@ -34,7 +34,7 @@ const LoginPage = ({ role }) => {
 
   
   const handleLoginRedirect = () => {
-    const path = "/FrontDeskDashboard"; // Replace with your actual path
+    const path = `/${role}Dashboard`; // redirects to path depending on role selected
     navigate(path);
   };
 

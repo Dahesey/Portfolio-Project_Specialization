@@ -21,7 +21,7 @@ const ChooseUser = () => {
   const { currentRole } = useSelector(state => state.user);
 
   const handleRoleSelect = (role) => {
-    navigate(`/login/${role}`);
+    navigate(`/${role}login`);
   };
 
   
