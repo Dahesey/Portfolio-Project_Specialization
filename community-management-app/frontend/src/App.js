@@ -13,7 +13,7 @@ import FrontDeskDashboard from "./pages/frontdesk/FrontDeskDashboard";
 const App = () => {
   const { currentRole } = useSelector((state) => state.user);
 
-  //const currentRole = "FrontDesk";
+  // const currentRole = "FrontDesk";
 
   return (
     <Router>

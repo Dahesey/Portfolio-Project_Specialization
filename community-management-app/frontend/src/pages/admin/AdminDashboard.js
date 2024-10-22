@@ -87,7 +87,7 @@ const AdminDashboard = () => {
                 <Box component="main" sx={styles.mainContent}>
                     <Toolbar />
                     <Routes>
-                        <Route path="/" element={<AdminHomePage />} />
+                        <Route path="/" element={<AdminDashboard />} />
                         <Route path='*' element={<Navigate to="/" />} />
                         <Route path="/Admin/dashboard" element={<AdminHomePage />} />
                         <Route path="/Admin/finance" element={<ShowFinance />} />
