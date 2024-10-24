@@ -1,5 +1,8 @@
+### CoDi-CMS 
+[Demo presentation](https://www.loom.com/share/d71bff66ec464b63bb2e4e04b74451f5?sid=b7ef8b0d-bff0-4974-9127-0a20a097d2c2) ---
+[Slides presentation](https://docs.google.com/presentation/d/1gooQWk4-7NrpdCslglNQyvHTrPSzRlYN4ydLw8UD2F4/edit?usp=sharing) ---
+[github repository](https://github.com/Dahesey/Portfolio-Project_Specialization)
 
-![potter-icon](https://github.com/user-attachments/assets/bea734c8-2b41-424f-9a51-0d3bf139dc7a)
 
 
 ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white)
@@ -10,12 +13,6 @@
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
-
-
-### CoDi-CMS 
-[Demo presentation](https://www.loom.com/share/d71bff66ec464b63bb2e4e04b74451f5?sid=b7ef8b0d-bff0-4974-9127-0a20a097d2c2) ---
-[Slides presentation](https://docs.google.com/presentation/d/1gooQWk4-7NrpdCslglNQyvHTrPSzRlYN4ydLw8UD2F4/edit?usp=sharing) ---
-[github repository](https://github.com/Dahesey/Portfolio-Project_Specialization)
 
 
 
