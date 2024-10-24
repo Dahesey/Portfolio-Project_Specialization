@@ -71,6 +71,11 @@ for local usage of the CoDi-CMS you' ll have to follow these steps listed down h
 
 ## Authors
 
+span style="text-decoration:none;">
+  <img src="https://github.com/dheereshagrwal/colored-icons/blob/master/public/logos/gmail/gmail.svg" alt="Email logo" width="20" style="vertical-align:middle;margin-right:5px;"/> 
+  <a href="mailto:dahesey@gmail.com" style="text-decoration:none;color:inherit;">Mail</a>
+</span> •
+
 Peter Obinna <4050fben@gmail.com>
 
 Adeniran ifeoluwa <deniranifeoluwa@gmail.com>
