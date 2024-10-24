@@ -38,6 +38,7 @@ const ChooseUser = () => {
     <StyledBackground>
       <StyledContainer>
         <Container>
+        
         {/* <Logo src={LOGO} alt="Logo" /> */}
           <Grid container spacing={12} justifyContent="center"> {/* Increased spacing here */}
             <Grid item xs={12} sm={6} md={4}>

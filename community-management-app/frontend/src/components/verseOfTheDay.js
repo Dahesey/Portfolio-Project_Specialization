@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Paper, Box, CircularProgress, Button } from '@mui/material';
 import styled from 'styled-components';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const VerseOfTheDay = () => {
   const [verse, setVerse] = useState('');
@@ -70,8 +71,16 @@ const VerseOfTheDay = () => {
       )}
       {/* Button toggles show more/less */}
       <StyledButton onClick={toggleShowMore} $variant="contained" $fullWidth={true}>
-        {showMore ? 'Show Less' : 'Show More'}
-      </StyledButton>
+        {showMore ? (
+            <>
+                <VisibilityOff style={{ marginLeft: '8px' }} /> {/* Eye icon for 'Show Less' */}
+            </>
+        ) : (
+            <>
+                <Visibility style={{ marginLeft: '8px' }} /> {/* Eye icon for 'Show More' */}
+            </>
+        )}
+        </StyledButton>
     </StyledPaper>
   );
 };
@@ -79,12 +88,12 @@ const VerseOfTheDay = () => {
 export default VerseOfTheDay;
 
 const StyledPaper = styled(Paper)`
-  padding: 10px;
+  padding: 20px;
   margin-bottom: 30px;
   text-align: center;
   background-color: rgba(0, 121, 107, 0.9); /* Green Color */
   transition: transform 0.5s ease-in-out;
-  width: 20px;
+  width: 35%;
   &:hover {
     transform: scale(1.03); /* Slight zoom on hover */
   }
