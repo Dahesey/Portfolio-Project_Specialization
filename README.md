@@ -1,3 +1,4 @@
+![Project logo](https://github.com/Dahesey/Portfolio-Project_Specialization/blob/main/community-management-app/frontend/public/CoDi-Logo.png?raw=true)
 ### CoDi-CMS 
 [Demo presentation](https://www.loom.com/share/d71bff66ec464b63bb2e4e04b74451f5?sid=b7ef8b0d-bff0-4974-9127-0a20a097d2c2) ---
 [Slides presentation](https://docs.google.com/presentation/d/1gooQWk4-7NrpdCslglNQyvHTrPSzRlYN4ydLw8UD2F4/edit?usp=sharing) ---
