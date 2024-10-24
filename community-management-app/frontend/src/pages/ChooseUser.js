@@ -11,6 +11,8 @@ import styled from 'styled-components';
 import BackgroundImage from '../assets/community8.jpg'; 
 // import LOGO from "../assets/Logo2.png";
 import {  useSelector } from 'react-redux';
+// importing verseOfTheDay component
+import VerseOfTheDay from '../components/verseOfTheDay';
 
 
 
@@ -36,6 +38,7 @@ const ChooseUser = () => {
     <StyledBackground>
       <StyledContainer>
         <Container>
+        <VerseOfTheDay />{/* this is the verse of the day component. */}
         {/* <Logo src={LOGO} alt="Logo" /> */}
           <Grid container spacing={12} justifyContent="center"> {/* Increased spacing here */}
             <Grid item xs={12} sm={6} md={4}>
