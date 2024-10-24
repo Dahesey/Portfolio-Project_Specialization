@@ -26,8 +26,6 @@ import AttendanceOverviewPage from './attendanceRelated/AttendanceOverviewPage '
 import ServiceAttendance from './attendanceRelated/ServiceAttendance';
 import MonthlyAttendance from './attendanceRelated/MonthlyAttendance';
 import ShowReports from './reportsRelated/ShowReports';
-
-
 import AccountMenu from '../../components/AccountMenu';
 
 const AdminDashboard = () => {

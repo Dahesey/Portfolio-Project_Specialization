@@ -1,5 +1,8 @@
+### CoDi-CMS 
+[Demo presentation](https://www.loom.com/share/d71bff66ec464b63bb2e4e04b74451f5?sid=b7ef8b0d-bff0-4974-9127-0a20a097d2c2) ---
+[Slides presentation](https://docs.google.com/presentation/d/1gooQWk4-7NrpdCslglNQyvHTrPSzRlYN4ydLw8UD2F4/edit?usp=sharing) ---
+[github repository](https://github.com/Dahesey/Portfolio-Project_Specialization)
 
-![potter-icon](https://github.com/user-attachments/assets/bea734c8-2b41-424f-9a51-0d3bf139dc7a)
 
 
 ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white)
@@ -12,19 +15,13 @@
 ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 
 
-# CoDi-CMS 
-[Demo presentation](https://www.loom.com/share/d71bff66ec464b63bb2e4e04b74451f5?sid=b7ef8b0d-bff0-4974-9127-0a20a097d2c2) ---
-[Slides presentation](https://docs.google.com/presentation/d/1gooQWk4-7NrpdCslglNQyvHTrPSzRlYN4ydLw8UD2F4/edit?usp=sharing) ---
-[github repository](https://github.com/Dahesey/Portfolio-Project_Specialization)
 
-
-
-## Project Overview
+### Project Overview
 ![CoDi image](https://github.com/user-attachments/assets/3f9280b9-edfb-4002-abb8-7e1aad76d2e6)
 
 This web application aims to streamline the process of managing attendance and financial transactions for a community or organization. By centralizing this information, the app will provide valuable insights to aid in decision-making and resource allocation.
 
-## Features of the app
+### Features of the app
 
 #### Administrator actions:
 
@@ -46,7 +43,7 @@ Offerings and Tithes: Record monetary contributions from members.
 
 Welfare Support: Track financial assistance provided to members in need.
 
-## Project Architecture and Technologies
+### Project Architecture and Technologies
 
 - ReactJS: was used for handling all logics of frontend related matters.
 
@@ -59,7 +56,7 @@ Welfare Support: Track financial assistance provided to members in need.
 - NodeJS: this library was used for the handling of backend logic and incorporation of databases such as MongoDB in this particular case.
 
 
-## Usage guidleines
+### Usage guidleines
 
 for local usage of the CoDi-CMS you' ll have to follow these steps listed down here:
 
@@ -69,15 +66,23 @@ for local usage of the CoDi-CMS you' ll have to follow these steps listed down h
 - after the above steps run this command for starting the frontend system server: npm start
 - the server should start automatically in your browser.
 
-## Authors
+### The Authors-Connect With Us <img src="https://github.com/TheDudeThatCode/TheDudeThatCode/blob/master/Assets/Handshake.gif" width="70" /> 
 
-Peter Obinna <4050fben@gmail.com>
+Peter Obinna
+  <img src="https://github.com/dheereshagrwal/colored-icons/blob/master/public/logos/gmail/gmail.svg" alt="Email logo" width="20" style="vertical-align:middle;margin-right:5px;"/> 
+  <a href="mailto:4050fben@gmail.com" style="text-decoration:none;color:inherit;">Mail</a>
 
-Adeniran ifeoluwa <deniranifeoluwa@gmail.com>
+ Adeniran ifeoluwa
+  <img src="https://github.com/dheereshagrwal/colored-icons/blob/master/public/logos/gmail/gmail.svg" alt="Email logo" width="20" style="vertical-align:middle;margin-right:5px;"/> 
+  <a href="mailto:deniranifeoluwa@gmail.com" style="text-decoration:none;color:inherit;">Mail</a>
 
-Cynthia Dodzi <dahesey@gmail.com>
+  Cynthia Dodzie
+  <img src="https://github.com/dheereshagrwal/colored-icons/blob/master/public/logos/gmail/gmail.svg" alt="Email logo" width="20" style="vertical-align:middle;margin-right:5px;"/> 
+  <a href="mailto:dahesey@gmail.com" style="text-decoration:none;color:inherit;">Mail</a>
 
-Eric Ishim <eriscorplock@gmail.com>
+Eric Ishim
+  <img src="https://github.com/dheereshagrwal/colored-icons/blob/master/public/logos/gmail/gmail.svg" alt="Email logo" width="20" style="vertical-align:middle;margin-right:5px;"/> 
+  <a href="mailto:eriscorplock@gmail.com" style="text-decoration:none;color:inherit;">Mail</a>
 
 
 
