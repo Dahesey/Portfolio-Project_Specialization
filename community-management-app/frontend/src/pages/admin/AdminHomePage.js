@@ -75,7 +75,7 @@ import {
       ],
     };
   
-    const newMembersByMonth = [0, 3, 5, 2, 4, 7, 8, 6, 9, 10, 12, 11];
+    const newMembersByMonth = [5, 3, 5, 2, 4, 7, 8, 6, 9, 10, 12, 11];
   
     useEffect(() => {
       const intervalId = setInterval(() => {
@@ -241,12 +241,13 @@ import {
         </Grid>
   
         <Box sx={{ mt: 4 }}>
-          <Typography variant="h6">
+          <Typography variant="h6" padding={"1rem"}>
             New Members This Month: {newMembersByMonth[selectedMonth]}
           </Typography>
+           <InputLabel padding={"5rem"}>Select Month</InputLabel> 
           <FormControl fullWidth sx={{ mb: 2 }}>
-            <InputLabel>Select Month</InputLabel>
-            <Select
+           
+            <Select 
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
             >

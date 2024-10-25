@@ -182,10 +182,10 @@ const MonthlyAttendance = () => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      {/* Back Button */}
-      <StyledIconButton onClick={() => navigate(-1)}>
-        <ArrowBackIcon sx={{ fontSize: 40 }} />
-      </StyledIconButton>
+   <StyledIconButton onClick={() => navigate(-1)}>
+  <ArrowBackIcon sx={{ fontSize: 24 }} /> {/* Increased icon size */}
+</StyledIconButton>
+
 
       <Typography variant="h4" align="center" gutterBottom>
         Monthly Attendance Overview
@@ -251,20 +251,22 @@ const Title = styled(Typography)`
   margin-bottom: 16px;
   font-weight: bold;
 `;
+
 const StyledIconButton = styled(IconButton)`
   position: absolute;
-  top: 20px;
-  left: -5px;
-  background-color: #f0f4f8; /* Light background for the circle */
+  top: 20px; /* Adjusted for better visibility */
+  left: 20px; /* Moved to the visible area */
+  background-color: #f0f4f8;
   border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   color: #3498db;
   width: 48px;
-  height: 48px;
+  height: 48px; /* Increased height to match width */
 
   &:hover {
-    background-color: rgba(52, 152, 219, 0.1); /* Slightly darker hover effect */
+    background-color: rgba(52, 152, 219, 0.1);
   }
 `;
+
 
 export default MonthlyAttendance;

@@ -15,13 +15,15 @@ import {
   InputAdornment,
   CircularProgress,
   MenuItem,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import bgpic from "../../assets/community8.jpg";
 import { LightBlueButton } from "../../components/buttonStyles";
 import { registerUser } from "../../redux/userRelated/userHandle";
-import styled from "styled-components";
+// import styled from "styled-components";
 
 const defaultTheme = createTheme();
 
@@ -32,6 +34,9 @@ const AdminRegisterPage = () => {
   const { status, currentUser, response, error, currentRole } = useSelector(
     (state) => state.user
   );
+  
+
+  console.log("FROM START >>>>>>",status,  currentUser, response, error, currentRole )
 
   const [togglePassword, setTogglePassword] = useState(false);
   const [toggleConfirmPassword, setToggleConfirmPassword] = useState(false);
@@ -39,12 +44,15 @@ const AdminRegisterPage = () => {
   const [loader, setLoader] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [contactError, setContactError] = useState(false);
-  const [genderError, setGenderError] = useState(false);
+  const [genderError, setGenderError] = useState("");
   const [passwordError, setPasswordError] = useState(false);
-  const [confirmPasswordError, setconfirmPasswordError] = useState(false);
+  const [confirmPasswordError, setConfirmPasswordError] = useState(false);
   const [adminFirstNameError, setAdminFirstNameError] = useState(false);
   const [adminLastNameError, setAdminLastNameError] = useState(false);
-  const [churchNameError, setchurchNameError] = useState(false);
+  const [churchNameError, setChurchNameError] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [showErrorPopup, setShowErrorPopup] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
   const role = "Admin";
 
   const handleSubmit = (event) => {
@@ -66,60 +74,88 @@ const AdminRegisterPage = () => {
       !email ||
       !contact ||
       !password ||
-      !gender ||
+      // !gender ||
       !confirmPassword
     ) {
       if (!adminFirstName) setAdminFirstNameError(true);
       if (!adminLastName) setAdminLastNameError(true);
-      if (!churchName) setchurchNameError(true);
+      if (!churchName) setChurchNameError(true);
       if (!email) setEmailError(true);
       if (!contact) setContactError(true);
-      if (!gender) setGenderError(true);
+      // if (!gender) setGenderError(true);
       if (!password) setPasswordError(true);
-      if (!confirmPassword) setconfirmPasswordError(true);
+      if (!confirmPassword) setConfirmPasswordError(true);
 
       return;
     }
 
     const fields = {
-      adminFirstName,
-      adminLastName,
+      name: `${adminFirstName} ${adminLastName}`, // Combine first and last name into a single 'name' field
       email,
       contact,
       gender,
       password,
       confirmPassword,
-      role,
       churchName,
     };
+
     setLoader(true);
     dispatch(registerUser(fields, role));
   };
 
   const handleInputChange = (event) => {
-    const { name } = event.target; // Changed this line to destructure 'name'
+    const { name } = event.target;
     if (name === "email") setEmailError(false);
     if (name === "password") setPasswordError(false);
-    if (name === "confirmPassword") setconfirmPasswordError(false);
+    if (name === "confirmPassword") setConfirmPasswordError(false);
     if (name === "contact") setContactError(false);
     if (name === "gender") setGenderError(false);
     if (name === "adminFirstName") setAdminFirstNameError(false);
     if (name === "adminLastName") setAdminLastNameError(false);
-    if (name === "churchName") setchurchNameError(false);
+    if (name === "churchName") setChurchNameError(false);
   };
 
+
+
+
   useEffect(() => {
+
+    console.log("FROM USE EFFECT >>>>>>", response )
     if (
       status === "success" ||
       (currentUser !== null && currentRole === "Admin")
     ) {
-      navigate("/Admin/dashboard");
+      setShowSuccessPopup(true); // Show the success popup
+      setLoader(false);
+      navigate("/Adminlogin");
+      // navigate("/AdminDashboard");
     } else if (status === "failed") {
       setLoader(false);
-    } else if (status === "error") {
-      console.log(error);
+      setShowErrorPopup(true);
+  
+      if (error && error.response && error.response.status === 400) {
+        const errorMsg = error.response.data.message || "Email Already Exist"; // Backend should return a message
+        setErrorMessage(errorMsg); // Set the error message from backend
+      } else {
+        setErrorMessage(response);
+      }
     }
   }, [status, currentUser, currentRole, navigate, error, response]);
+
+
+
+  
+
+
+  const handleCloseSuccessPopup = (event, reason) => {
+    if (reason === "clickaway") return;
+    setShowSuccessPopup(false); // Close the popup
+  };
+
+  const handleCloseErrorPopup = (event, reason) => {
+    if (reason === "clickaway") return;
+    setShowErrorPopup(false); // Close the error popup
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -147,8 +183,6 @@ const AdminRegisterPage = () => {
           square
           sx={{
             background: "rgba(255, 255, 255, 0.8)",
-            // backgroundColor: "rgba(255, 255, 255, 0.50)",
-            // backdropFilter: "blur(10px)",
             padding: "2rem",
             borderRadius: "10px",
           }}
@@ -177,6 +211,7 @@ const AdminRegisterPage = () => {
               sx={{ mt: 2 }}
             >
               <Grid container spacing={2}>
+                {/* First Name */}
                 <Grid item xs={12} sm={6}>
                   <TextField
                     margin="normal"
@@ -193,6 +228,7 @@ const AdminRegisterPage = () => {
                   />
                 </Grid>
 
+                {/* Last Name */}
                 <Grid item xs={12} sm={6}>
                   <TextField
                     margin="normal"
@@ -208,6 +244,7 @@ const AdminRegisterPage = () => {
                   />
                 </Grid>
 
+                {/* Gender */}
                 <Grid item xs={12} sm={6}>
                   <TextField
                     margin="normal"
@@ -221,11 +258,12 @@ const AdminRegisterPage = () => {
                     helperText={genderError && "Gender selection is required"}
                     onChange={handleInputChange}
                   >
-                    <MenuItem value="male">Male</MenuItem>
-                    <MenuItem value="female">Female</MenuItem>
+                    <MenuItem value="Male">Male</MenuItem>
+                    <MenuItem value="Female">Female</MenuItem>
                   </TextField>
                 </Grid>
 
+                {/* Church Name */}
                 <Grid item xs={12} sm={6}>
                   <TextField
                     margin="normal"
@@ -241,6 +279,7 @@ const AdminRegisterPage = () => {
                   />
                 </Grid>
 
+                {/* Email */}
                 <Grid item xs={12} sm={6}>
                   <TextField
                     margin="normal"
@@ -256,6 +295,7 @@ const AdminRegisterPage = () => {
                   />
                 </Grid>
 
+                {/* Contact */}
                 <Grid item xs={12} sm={6}>
                   <TextField
                     margin="normal"
@@ -271,16 +311,17 @@ const AdminRegisterPage = () => {
                   />
                 </Grid>
 
+                {/* Password */}
                 <Grid item xs={12} sm={6}>
                   <TextField
                     margin="normal"
                     required
                     fullWidth
-                    name="password"
-                    label="Password"
-                    type={togglePassword ? "text" : "password"}
                     id="password"
-                    autoComplete="current-password"
+                    name="password"
+                    label="Create a password"
+                    type={togglePassword ? "text" : "password"}
+                    autoComplete="new-password"
                     error={passwordError}
                     helperText={passwordError && "Password is required"}
                     onChange={handleInputChange}
@@ -289,6 +330,7 @@ const AdminRegisterPage = () => {
                         <InputAdornment position="end">
                           <IconButton
                             onClick={() => setTogglePassword(!togglePassword)}
+                            edge="end"
                           >
                             {togglePassword ? (
                               <Visibility />
@@ -302,19 +344,20 @@ const AdminRegisterPage = () => {
                   />
                 </Grid>
 
+                {/* Confirm Password */}
                 <Grid item xs={12} sm={6}>
                   <TextField
                     margin="normal"
                     required
                     fullWidth
-                    name="confirmPassword"
-                    label="Confirm Password"
-                    type={toggleConfirmPassword ? "text" : "password"} // Use the toggleConfirmPassword state
                     id="confirmPassword"
-                    autoComplete="current-password"
+                    name="confirmPassword"
+                    label="Confirm password"
+                    type={toggleConfirmPassword ? "text" : "password"}
+                    autoComplete="new-password"
                     error={confirmPasswordError}
                     helperText={
-                      confirmPasswordError && "Confirm Password is required"
+                      confirmPasswordError && "Confirm password is required"
                     }
                     onChange={handleInputChange}
                     InputProps={{
@@ -324,6 +367,7 @@ const AdminRegisterPage = () => {
                             onClick={() =>
                               setToggleConfirmPassword(!toggleConfirmPassword)
                             }
+                            edge="end"
                           >
                             {toggleConfirmPassword ? (
                               <Visibility />
@@ -336,55 +380,82 @@ const AdminRegisterPage = () => {
                     }}
                   />
                 </Grid>
+
+                {/* Agreement Checkbox */}
+                <Grid item xs={12}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        value="allowExtraEmails"
+                        color="primary"
+                        required
+                      />
+                    }
+                    label="I agree to all terms and conditions."
+                  />
+                </Grid>
+
+                {/* Submit Button */}
+                <Grid item xs={12}>
+                  <LightBlueButton
+                    type="submit"
+                    fullWidth
+                    sx={{ mt: 3, mb: 2, color: "#fff" }}
+                  >
+                    {loader ? <CircularProgress size={24} /> : "Register"}
+                  </LightBlueButton>
+                </Grid>
               </Grid>
 
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    value="agree"
-                    color="primary"
-                    required
-                    name="agree"
-                  />
-                }
-                label="I agree to the terms and conditions"
-              />
-              <LightBlueButton
-                type="submit"
-                variant="contained"
-                sx={{
-                  mt: 3,
-                  mb: 2,
-                  width: "100%",
-                  backgroundColor: "#3e8e41",
-                  "&:hover": {
-                    backgroundColor: "#1b5e20",
-                  },
-                }}
-              >
-                {loader ? <CircularProgress size={24} /> : "Register"}
-              </LightBlueButton>
-
-              <Grid container justifyContent="flex-end">
+              {/* Already registered? */}
+              <Grid container justifyContent="center">
                 <Grid item>
-                  <StyledLink to="/Adminlogin">
-                    Already have an account? Log in
-                  </StyledLink>
+                  <Link
+                    to="/AdminLogin"
+                    style={{ color: "#3f51b5", textDecoration: "none" }}
+                  >
+                    Already have an account? Login
+                  </Link>
                 </Grid>
               </Grid>
             </Box>
           </Box>
         </Grid>
+
+        {/* Success Popup Snackbar */}
+        <Snackbar
+          open={showSuccessPopup}
+          autoHideDuration={6000}
+          onClose={handleCloseSuccessPopup}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }} // Center the popup at the top
+        >
+          <Alert
+            onClose={handleCloseSuccessPopup}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            Admin registered successfully!
+          </Alert>
+        </Snackbar>
+
+        {/* Error Popup Snackbar */}
+        <Snackbar
+          open={showErrorPopup}
+          autoHideDuration={8000}
+          onClose={handleCloseErrorPopup}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }} // Center the popup at the top
+        >
+          <Alert
+            onClose={handleCloseErrorPopup}
+            severity="error"
+            sx={{ width: "100%" }}
+          >
+            {errorMessage} {/* Display the error message */}
+          </Alert>
+        </Snackbar>
       </Grid>
     </ThemeProvider>
   );
 };
 
 export default AdminRegisterPage;
-
-
-const StyledLink = styled(Link)`
-  margin-top: 9px;
-  text-decoration: none;
-  color: #1a5276;
-`;

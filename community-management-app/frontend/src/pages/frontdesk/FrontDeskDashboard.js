@@ -17,6 +17,12 @@ import SideBar from './SideBar';
 import AddMember from './memberRelated/AddMember';
 import FrontDeskHomePage from './FrontDeskHomePage';
 import AccountMenu from '../../components/AccountMenu';
+import MembershipPage from './membership/membershipPage';
+import MemberAttendancePage from './membership/MemberAttendancePage';
+import ChildrenAttendancePage from './membership/ChildrenAttendancePage';
+import AddMemberPage from './membership/AddMemberPage';
+import CheckInPage from './membership/CheckInPage';
+import ViewMemberPage from './membership/ViewMemberPage';
 
 const FrontDeskDashboard = () => {
     const [open, setOpen] = useState(false);
@@ -77,7 +83,8 @@ const FrontDeskDashboard = () => {
                     <Routes>
                         <Route path="/" element={<FrontDeskHomePage />} />
                         <Route path='*' element={<Navigate to="/" />} />
-                        <Route path="/FrontDesk/Membership" element={<AddMember />} />
+                        <Route path="/FrontDesk/dashboard" element={<FrontDeskHomePage />} />
+                        <Route path="/FrontDesk/profile" element={<FrontDeskProfile />} />
                         <Route path="/logout" element={<Logout />} />
                     </Routes>
                 </Box>

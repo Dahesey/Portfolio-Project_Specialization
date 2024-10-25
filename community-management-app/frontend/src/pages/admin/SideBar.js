@@ -16,6 +16,7 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import AttendanceIcon from '@mui/icons-material/EventAvailable';
+import EventIcon from '@mui/icons-material/Event';
 
 const SideBar = ({ isSidebarExpanded }) => {
   const location = useLocation();
@@ -31,6 +32,15 @@ const SideBar = ({ isSidebarExpanded }) => {
           </Tooltip>
           {/* Conditionally render ListItemText based on sidebar expansion */}
           {isSidebarExpanded && <ListItemText primary="Home" />}
+        </ListItemButton>
+
+        <ListItemButton component={Link} to="/Admin/event-overview">
+          <Tooltip title="Event" placement="right" arrow disableHoverListener={isSidebarExpanded}>
+            <ListItemIcon>
+              <EventIcon color={location.pathname.startsWith('/Admin/event-overview') ? 'primary' : 'inherit'} />
+            </ListItemIcon>
+          </Tooltip>
+          {isSidebarExpanded && <ListItemText primary="Event" />}
         </ListItemButton>
 
             

@@ -1,24 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
+import { useSelector } from 'react-redux';
 import { Card, CardContent, Typography, Grid, Avatar, Box, IconButton, TextField, Button, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 
-// Dummy Data
-const userProfile = {
-    name: "John Doe",
-    title: "Mr.",
-    mobile: "+1 234 567 890",
-    email: "john.doe@example.com",
-    dob: "1990-01-15",
-    address: "123 Main Street, Springfield",
-    state: "Existing Member",
-    gender: "Male",
-    department: "Music",
-    occupation: "Engineer"
-};
-
 const AdminProfile = () => {
+    const { currentUser } = useSelector((state) => state.user);
     const [isEditing, setIsEditing] = useState(false);
-    const [profileData, setProfileData] = useState(userProfile);
+    const [profileData, setProfileData] = useState(currentUser);
 
     const handleEditToggle = () => {
         setIsEditing((prev) => !prev);
@@ -43,7 +31,7 @@ const AdminProfile = () => {
                     <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
                         <Avatar
                             alt={profileData.name}
-                            src="/static/images/avatar/1.jpg"
+                            // src="/static/images/avatar/1.jpg"
                             sx={{ width: 80, height: 80, marginRight: '20px' }}
                         />
                         <div>
@@ -60,7 +48,6 @@ const AdminProfile = () => {
                     </Box>
 
                     {/* Profile Information */}
-
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
@@ -73,9 +60,6 @@ const AdminProfile = () => {
                                 disabled={!isEditing}
                             />
                         </Grid>
-
-
-                   
                         <Grid item xs={12}>
                             <TextField
                                 variant="outlined"
@@ -98,13 +82,15 @@ const AdminProfile = () => {
                                 disabled={!isEditing}
                             />
                         </Grid>
+
+                        {/* New Fields: Contact and Church Name */}
                         <Grid item xs={12}>
                             <TextField
                                 variant="outlined"
                                 fullWidth
-                                label="Date of Birth"
-                                name="dob"
-                                value={profileData.dob}
+                                label="Contact"
+                                name="contact"
+                                value={profileData.contact}
                                 onChange={handleChange}
                                 disabled={!isEditing}
                             />
@@ -113,13 +99,14 @@ const AdminProfile = () => {
                             <TextField
                                 variant="outlined"
                                 fullWidth
-                                label="Address"
-                                name="address"
-                                value={profileData.address}
+                                label="Church Name"
+                                name="churchName"
+                                value={profileData.churchName}
                                 onChange={handleChange}
                                 disabled={!isEditing}
                             />
                         </Grid>
+
                         <Grid item xs={6}>
                             <FormControl fullWidth variant="outlined" disabled={!isEditing}>
                                 <InputLabel>Gender</InputLabel>
@@ -133,28 +120,6 @@ const AdminProfile = () => {
                                     <MenuItem value="Female">Female</MenuItem>
                                 </Select>
                             </FormControl>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                label="Department"
-                                name="department"
-                                value={profileData.department}
-                                onChange={handleChange}
-                                disabled={!isEditing}
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                label="Occupation"
-                                name="occupation"
-                                value={profileData.occupation}
-                                onChange={handleChange}
-                                disabled={!isEditing}
-                            />
                         </Grid>
                     </Grid>
 

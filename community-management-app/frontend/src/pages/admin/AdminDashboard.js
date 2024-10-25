@@ -26,6 +26,8 @@ import AttendanceOverviewPage from './attendanceRelated/AttendanceOverviewPage '
 import ServiceAttendance from './attendanceRelated/ServiceAttendance';
 import MonthlyAttendance from './attendanceRelated/MonthlyAttendance';
 import ShowReports from './reportsRelated/ShowReports';
+
+
 import AccountMenu from '../../components/AccountMenu';
 
 const AdminDashboard = () => {
@@ -88,34 +90,29 @@ const AdminDashboard = () => {
                         <Route path="/" element={<AdminHomePage />} />
                         <Route path='*' element={<Navigate to="/" />} />
                         <Route path="/Admin/dashboard" element={<AdminHomePage />} />
-                        <Route path="/Admin/finance" element={<ShowFinance />} />
                         <Route path="/Admin/profile" element={<AdminProfile />} />
-                        <Route path="/Admin/frontdesk" element={<ShowFrontDesk />} />
 
+
+                        <Route path="/Admin/event-overview" element={<EventOverviewPage />} />
+                        <Route path="/Admin/AddEvent" element={<AddEventPage />} />
+                        <Route path="/Admin/EventDetails" element={<EventDetails />} />
+                        
+
+                            
+                        <Route path="/Admin/frontdesk" element={<ShowFrontDesk />} />
                         <Route path="/Admin/manage-personnel" element={<FrontDeskDetails />} />
                         <Route path="/Admin/add-personnel" element={<AddFrontDesk />} />
 
+                        <Route path="/Admin/finance" element={<ShowFinance />} />
                         <Route path="/Admin/add-finance-personnel" element={<AddFinance />} /> 
                         <Route path="/Admin/manage-finance-personnel" element={<FinanceDetails />} />
 
 
                         <Route path="/Admin/attendance" element={<AttendanceOverviewPage />} />
-
                         <Route path="/Admin/attendance/Admin/service-attendance" element={<ServiceAttendance />} />
                         <Route path="/Admin/monthly-attendance" element={<MonthlyAttendance />} />
 
                         <Route path="/Admin/report" element={<ShowReports />} />
-
-
-
-
-
-
-
-
-
-
-
 
 
                         <Route path="/logout" element={<Logout />} />

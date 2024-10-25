@@ -1,24 +1,29 @@
 import React, { useState } from 'react';
 import { Card, CardContent, Typography, Grid, Avatar, Box, IconButton, TextField, Button, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import { useSelector } from 'react-redux';
 
 // Dummy Data
-const userProfile = {
-    name: "John Doe",
-    title: "Mr.",
-    mobile: "+1 234 567 890",
-    email: "john.doe@example.com",
-    dob: "1990-01-15",
-    address: "123 Main Street, Springfield",
-    state: "Existing Member",
-    gender: "Male",
-    department: "Music",
-    occupation: "Engineer"
-};
+// const userProfile = {
+//     name: "John Doe",
+//     title: "Mr.",
+//     mobile: "+1 234 567 890",
+//     email: "john.doe@example.com",
+//     dob: "1990-01-15",
+//     address: "123 Main Street, Springfield",
+//     state: "Existing Member",
+//     gender: "Male",
+//     department: "Music",
+//     occupation: "Engineer"
+// };
 
 const AdminProfile = () => {
+
+    const { currentUser } = useSelector((state) => state.user);
+
+
     const [isEditing, setIsEditing] = useState(false);
-    const [profileData, setProfileData] = useState(userProfile);
+    const [profileData, setProfileData] = useState(currentUser);
 
     const handleEditToggle = () => {
         setIsEditing((prev) => !prev);
