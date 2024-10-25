@@ -28,9 +28,6 @@ const eventCreate = async (req, res) => {
 
 
 
-
-
-
   const getAllEvents = async (req, res) => {
     try {
       // Fetch all events from the database
@@ -70,12 +67,6 @@ const getLatestEventID = async (req, res) => {
   };
 
 
-
-
-
-
-
-  
 //   module.exports = { getLatestEventID };
   
 

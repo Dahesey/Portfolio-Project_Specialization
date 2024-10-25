@@ -1,11 +1,4 @@
 import axios from "axios";
-// import {
-//   getRequest,
-//   getSuccess,
-//   getFailed,
-//   getError,
-//   stuffDone,
-// } from "./eventSlice";
 
 import { getRequest, getSuccess, getFailed, getError } from "./eventSlice";
 

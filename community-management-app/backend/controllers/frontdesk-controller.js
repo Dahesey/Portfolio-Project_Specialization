@@ -1,31 +1,6 @@
 const bcrypt = require('bcrypt');
 const Frontdesk = require('../models/frontdeskSchema.js');
 
-// const frontdeskRegister = async (req, res) => {
-//     try {
-//         // Hash the password before saving the user
-//         const salt = await bcrypt.genSalt(10);
-//         const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
-//         // Create a new Frontdesk instance with hashed password
-//         const frontdesk = new Frontdesk({
-//             ...req.body,
-//             password: hashedPassword, // Use the hashed password
-//         });
-
-//         const existingFrontdeskByName = await Frontdesk.findOne({ frontdeskName: req.body.frontdeskName });
-
-//         if (existingFrontdeskByName) {
-//             res.status(400).send({ message: 'Name already exists' });
-//         } else {
-//             let result = await frontdesk.save();
-//             result.password = undefined; // Do not return the password in the response
-//             res.send({ message: 'Successfully registered.', frontdesk: result });
-//         }
-//     } catch (err) {
-//         res.status(500).json(err);
-//     }
-// };
 
 const frontdeskRegister = async (req, res) => {
     try {
