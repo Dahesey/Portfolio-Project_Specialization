@@ -1,16 +1,22 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { TextField, Button, Typography, MenuItem, Paper, Snackbar, Alert } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Typography,
+  MenuItem,
+  Paper,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { addMember } from "../../../redux/memberRelated/memberHandle";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 
 const AddMemberPage = () => {
-  
   const dispatch = useDispatch();
-  const navigate = useNavigate(); 
-
+  const navigate = useNavigate();
   const { status, response, error } = useSelector((state) => state.user);
 
   const [memberType, setMemberType] = useState("New Member");
@@ -23,13 +29,12 @@ const AddMemberPage = () => {
     dob: null,
     address: "",
     gender: "",
-    department: "",
+    department: "", // For Existing Member
     occupation: "",
     contributionToWelfare: "",
     memberSince: null,
     numberOfChildren: "",
     tithePayer: "",
-    branch: "",
     reasonForVisit: "", // For Guest Member
   });
 
@@ -44,7 +49,7 @@ const AddMemberPage = () => {
       ...memberData,
       [name]: value,
     });
-    setErrors({ ...errors, [name]: "" }); // Clear error when user starts typing
+    setErrors({ ...errors, [name]: "" });
   };
 
   const handleDateChange = (name, value) => {
@@ -52,21 +57,16 @@ const AddMemberPage = () => {
       ...memberData,
       [name]: value,
     });
-    setErrors({ ...errors, [name]: "" }); // Clear error when date is picked
+    setErrors({ ...errors, [name]: "" });
   };
 
-  // Validation function
   const validateFields = () => {
     const newErrors = {};
     const requiredFields = ["firstname", "lastname", "mobile", "email"];
 
     if (memberType === "New Member" || memberType === "Existing Member") {
-      requiredFields.push("title", "dob");
+      requiredFields.push("title", "dob", "address");
     }
-
-    // if (memberType === "Existing Member") {
-    //   requiredFields.push("memberId");
-    // }
 
     if (memberType === "Guest Member") {
       requiredFields.push("reasonForVisit");
@@ -79,8 +79,6 @@ const AddMemberPage = () => {
     });
 
     setErrors(newErrors);
-
-    // Return false if there are any errors
     return Object.keys(newErrors).length === 0;
   };
 
@@ -90,40 +88,52 @@ const AddMemberPage = () => {
     if (!validateFields()) {
       setShowErrorPopup(true);
       setErrorMessage("Please fill in all required fields.");
-      return; // Prevent form submission
+      return;
     }
 
     const fullName = `${memberData.firstname} ${memberData.lastname}`;
     const finalMemberData = {
       ...memberData,
+      memberType: memberType, 
       name: fullName,
     };
     dispatch(addMember(finalMemberData));
   };
 
+  // useEffect(() => {
+  //   if (status === "success") {
+  //     setShowSuccessPopup(true);
+  //   } else if (status === "500") {
+  //     setShowErrorPopup(true);
+  //     const errorMsg =
+  //       error?.response?.data?.message || response || "Member Already Exists";
+  //     setErrorMessage(errorMsg);
+  //   }
+
+
+  console.log("AT START  >>>> ",)
+  
   useEffect(() => {
+    console.log("AT RESPONSE  >>>> ", response)
+
     if (status === "success") {
+      console.log("AT SUCCESS  >>>> ", status)
       setShowSuccessPopup(true);
-    } else if (status === "500") {
+      setTimeout(() => {
+        dispatch({ type: "CLEAR_STATUS" }); // Clears the status in Redux after a successful add
+      }, 3000); // Matches autoHideDuration
+    } else if (status === "400") { // assuming error status is set as "error"
       setShowErrorPopup(true);
-      if (error && error.response && error.response.status === 400) {
-        const errorMsg = error.response.data.message || "Member Already Exists";
-        setErrorMessage(errorMsg);
-      } else {
-        setErrorMessage(response);
-      }
+      // setErrorMessage(error?.response?.data?.message || response || "Member Already Exists");
+      setErrorMessage("Member Already Exist");
+      console.log("RESPONSE WHEN STATUS IS 400 >>>>", response.data)
+      setTimeout(() => {
+        dispatch({ type: "CLEAR_STATUS" }); // Clears the error status in Redux after showing popup
+      }, 3000);
     }
-  }, [status, error, response]);
+  }, [status, error, response, dispatch]);
 
-  const handleCloseSuccessPopup = (event, reason) => {
-    if (reason === "clickaway") return;
-    setShowSuccessPopup(false);
-  };
-
-  const handleCloseErrorPopup = (event, reason) => {
-    if (reason === "clickaway") return;
-    setShowErrorPopup(false);
-  };
+  
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -155,15 +165,9 @@ const AddMemberPage = () => {
             name="firstname"
             value={memberData.firstname}
             onChange={handleInputChange}
-            sx={{
-              marginBottom: "16px",
-              '& .MuiOutlinedInput-root': errors.firstname && { borderColor: 'red' },
-            }}
+            sx={{ marginBottom: "16px" }}
             error={Boolean(errors.firstname)}
             helperText={errors.firstname}
-            FormHelperTextProps={{
-              sx: { textAlign: 'center', color: 'red' },
-            }}
             required
           />
           <TextField
@@ -172,15 +176,9 @@ const AddMemberPage = () => {
             name="lastname"
             value={memberData.lastname}
             onChange={handleInputChange}
-            sx={{
-              marginBottom: "16px",
-              '& .MuiOutlinedInput-root': errors.lastname && { borderColor: 'red' },
-            }}
+            sx={{ marginBottom: "16px" }}
             error={Boolean(errors.lastname)}
             helperText={errors.lastname}
-            FormHelperTextProps={{
-              sx: { textAlign: 'center', color: 'red' },
-            }}
             required
           />
           <TextField
@@ -189,15 +187,9 @@ const AddMemberPage = () => {
             name="mobile"
             value={memberData.mobile}
             onChange={handleInputChange}
-            sx={{
-              marginBottom: "16px",
-              '& .MuiOutlinedInput-root': errors.mobile && { borderColor: 'red' },
-            }}
+            sx={{ marginBottom: "16px" }}
             error={Boolean(errors.mobile)}
             helperText={errors.mobile}
-            FormHelperTextProps={{
-              sx: { textAlign: 'center', color: 'red' },
-            }}
             required
           />
           <TextField
@@ -206,123 +198,193 @@ const AddMemberPage = () => {
             name="email"
             value={memberData.email}
             onChange={handleInputChange}
-            sx={{
-              marginBottom: "16px",
-              '& .MuiOutlinedInput-root': errors.email && { borderColor: 'red' },
-            }}
+            sx={{ marginBottom: "16px" }}
             error={Boolean(errors.email)}
             helperText={errors.email}
-            FormHelperTextProps={{
-              sx: { textAlign: 'center', color: 'red' },
-            }}
             required
           />
 
-          {/* Fields for New Members and Existing Members */}
-          <TextField
-            fullWidth
-            label="Title"
-            name="title"
-            value={memberData.title}
-            onChange={handleInputChange}
-            sx={{
-              marginBottom: "16px",
-              '& .MuiOutlinedInput-root': errors.title && { borderColor: 'red' },
-            }}
-            error={Boolean(errors.title)}
-            helperText={errors.title}
-            FormHelperTextProps={{
-              sx: { textAlign: 'center', color: 'red' },
-            }}
-            required={memberType === "New Member" || memberType === "Existing Member"}
-          />
-          <DatePicker
-            label="Date of Birth"
-            value={memberData.dob}
-            onChange={(date) => handleDateChange("dob", date)}
-            renderInput={(params) => (
+
+
+          {/* Fields for New and Existing Members */}
+          {(memberType === "New Member" ||
+            memberType === "Existing Member") && (
+            <>
               <TextField
-                {...params}
                 fullWidth
-                sx={{
-                  marginBottom: "16px",
-                  '& .MuiOutlinedInput-root': errors.dob && { borderColor: 'red' },
-                }}
-                error={Boolean(errors.dob)}
-                helperText={errors.dob}
-                FormHelperTextProps={{
-                  sx: { textAlign: 'center', color: 'red' },
-                }}
-                required={memberType === "New Member" || memberType === "Existing Member"}
+                label="Title"
+                name="title"
+                value={memberData.title}
+                onChange={handleInputChange}
+                sx={{ marginBottom: "16px" }}
+                error={Boolean(errors.title)}
+                helperText={errors.title}
+                required
               />
-            )}
-          />
+
+<TextField
+                fullWidth
+                label="Address"
+                name="address"
+                value={memberData.address}
+                onChange={handleInputChange}
+                sx={{ marginBottom: "16px" }}
+                error={Boolean(errors.address)}
+                helperText={errors.address}
+                required
+              />
+
+<TextField
+                fullWidth
+                select // dropdown for gender
+                label="Gender"
+                name="gender"
+                value={memberData.gender}
+                onChange={handleInputChange}
+                sx={{ marginBottom: "16px" }}
+              >
+                {["Male", "Female"].map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </TextField>
+
+              <DatePicker
+                label="Date of Birth"
+                value={memberData.dob}
+                onChange={(date) => handleDateChange("dob", date)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    sx={{ marginBottom: "16px" }}
+                    error={Boolean(errors.dob)}
+                    helperText={errors.dob}
+                    required
+                  />
+                )}
+              />
+            </>
+          )}
 
           {/* Additional field for Existing Member */}
-          {/* <TextField
-            fullWidth
-            label="Member ID"
-            name="memberId"
-            value={memberData.memberId}
-            onChange={handleInputChange}
-            sx={{
-              marginBottom: "16px",
-              '& .MuiOutlinedInput-root': errors.memberId && { borderColor: 'red' },
-            }}
-            error={Boolean(errors.memberId)}
-            helperText={errors.memberId}
-            FormHelperTextProps={{
-              sx: { textAlign: 'center', color: 'red' },
-            }}
-            required={memberType === "Existing Member"}
-          /> */}
+          {memberType === "Existing Member" && (
+            <>
+              <TextField
+                fullWidth
+                label="Department"
+                name="department"
+                value={memberData.department}
+                onChange={handleInputChange}
+                sx={{ marginBottom: "16px" }}
+              />
+
+              <TextField
+                fullWidth
+                label="Tithe Payer"
+                name="tithePayer"
+                value={memberData.tithePayer}
+                onChange={handleInputChange}
+                sx={{ marginBottom: "16px" }}
+              />
+
+              <TextField
+                fullWidth
+                label="Member Since"
+                name="memberSince"
+                type="date" // date input for consistency with date format
+                InputLabelProps={{ shrink: true }} // keeps label position
+                value={memberData.memberSince}
+                onChange={handleInputChange}
+                sx={{ marginBottom: "16px" }}
+              />
+
+              <TextField
+                fullWidth
+                select
+                label="Contribution to Welfare"
+                name="contributionToWelfare"
+                // type="number" // if it’s monetary, numeric input is useful
+                value={memberData.contributionToWelfare}
+                onChange={handleInputChange}
+                sx={{ marginBottom: "16px" }}
+              >
+                  {["Yes", "No"].map((status) => (
+                  <MenuItem key={status} value={status}>
+                    {status}
+                  </MenuItem>
+                ))}
+              </TextField>
+
+              <TextField
+                fullWidth
+                select // dropdown for relationship status
+                label="Relationship Status"
+                name="relationshipStatus"
+                value={memberData.relationshipStatus}
+                onChange={handleInputChange}
+                sx={{ marginBottom: "16px" }}
+              >
+                {["Single", "Married", "Divorced", "Widowed"].map((status) => (
+                  <MenuItem key={status} value={status}>
+                    {status}
+                  </MenuItem>
+                ))}
+              </TextField>
+
+       
+            </>
+          )}
 
           {/* Additional field for Guest Member */}
-          <TextField
-            fullWidth
-            label="Reason for Visit"
-            name="reasonForVisit"
-            value={memberData.reasonForVisit}
-            onChange={handleInputChange}
-            sx={{
-              marginBottom: "16px",
-              '& .MuiOutlinedInput-root': errors.reasonForVisit && { borderColor: 'red' },
-            }}
-            error={Boolean(errors.reasonForVisit)}
-            helperText={errors.reasonForVisit}
-            FormHelperTextProps={{
-              sx: { textAlign: 'center', color: 'red' },
-            }}
-            required={memberType === "Guest Member"}
-          />
+          {memberType === "Guest Member" && (
+            <TextField
+              fullWidth
+              label="Reason for Visit"
+              name="reasonForVisit"
+              value={memberData.reasonForVisit}
+              onChange={handleInputChange}
+              sx={{ marginBottom: "16px" }}
+              error={Boolean(errors.reasonForVisit)}
+              helperText={errors.reasonForVisit}
+              required
+            />
+          )}
 
           <Button variant="contained" color="primary" type="submit" fullWidth>
             Submit
           </Button>
 
-
-          {/* Add Back button */}
           <Button
             variant="outlined"
             color="secondary"
             fullWidth
             sx={{ marginTop: "16px" }}
-            onClick={() => navigate(-1)} // Navigate back
+            onClick={() => navigate(-1)}
           >
             Back
           </Button>
         </form>
 
         {/* Success Popup */}
-        <Snackbar open={showSuccessPopup} autoHideDuration={3000} onClose={handleCloseSuccessPopup}>
-          <Alert onClose={handleCloseSuccessPopup} severity="success">
+        <Snackbar
+          open={showSuccessPopup}
+          autoHideDuration={3000}
+          onClose={() => setShowSuccessPopup(false)}
+        >
+          <Alert onClose={() => setShowSuccessPopup(false)} severity="success">
             Member added successfully!
           </Alert>
         </Snackbar>
 
         {/* Error Popup */}
-        <Snackbar open={showErrorPopup} autoHideDuration={6000} onClose={handleCloseErrorPopup}>
-          <Alert onClose={handleCloseErrorPopup} severity="error">
+        <Snackbar
+          open={showErrorPopup}
+          autoHideDuration={3000}
+          onClose={() => setShowErrorPopup(false)}
+        >
+          <Alert onClose={() => setShowErrorPopup(false)} severity="error">
             {errorMessage}
           </Alert>
         </Snackbar>
