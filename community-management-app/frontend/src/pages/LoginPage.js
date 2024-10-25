@@ -19,6 +19,7 @@ import { LightBlueButton } from "../components/buttonStyles";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import { loginUser } from '../redux/userRelated/userHandle';
 
 const defaultTheme = createTheme();
 
@@ -29,20 +30,28 @@ const LoginPage = ({ role }) => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { currentRole } = useSelector((state) => state.user);
 
+  const { status, currentUser, response, error, currentRole } = useSelector(state => state.user);;
 
   
-  const handleLoginRedirect = () => {
-    const path = "/FrontDeskDashboard"; // Replace with your actual path
-    navigate(path);
-  };
+  // const handleLoginRedirect = () => {
+  //   const path = "/FrontDeskDashboard"; // Replace with your actual path
+  //   navigate(path);
+  // };
 
-  const [toggle, setToggle] = useState(false);
-  const [loader, setLoader] = useState(false);
+
+  const [toggle, setToggle] = useState(false)
+  // const [guestLoader, setGuestLoader] = useState(false)
+  const [loader, setLoader] = useState(false)
+  // const [showPopup, setShowPopup] = useState(false);
+  // const [message, setMessage] = useState("");
+
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [frontdeskNameError, setFrontdeskNameError] = useState(false);
+  const [financeUserNameError, setfinanceUserNameError] = useState(false);
+
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -59,7 +68,8 @@ const LoginPage = ({ role }) => {
         return;
       }
       fields = { frontdeskName, password };
-    } else {
+      dispatch(loginUser(fields, role))
+    } else if ( role === "Admin") {
       const email = event.target.email.value;
       const password = event.target.password.value;
 
@@ -69,53 +79,60 @@ const LoginPage = ({ role }) => {
         return;
       }
       fields = { email, password };
-    }
+      setLoader(true);
+      dispatch(loginUser(fields, role))
+    } else if ( role === "Finance") {
+      const financeUserName = event.target.financeUserName.value;
+      const password = event.target.password.value;
 
-    setLoader(true);
-
-    try {
-      const response = await fetch('https://api.mock.com/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(fields),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // Dispatch login success action with user data
-        dispatch({ type: 'LOGIN_SUCCESS', payload: data });
-        // Optionally store token or user info in local storage
-        localStorage.setItem('token', data.token);
-      } else {
-        // Show error message to the user
-        console.error(data.message);
-        alert(data.message || "Login failed!"); // Simple alert for demonstration
+      if (!financeUserName || !password) {
+        if (!financeUserName) setfinanceUserNameError(true);
+        if (!password) setPasswordError(true);
+        return;
       }
-    } catch (error) {
-      console.error('Login failed:', error);
-      alert("Login failed due to network error. Please try again."); // Show network error
-    } finally {
-      setLoader(false);
+      fields = { financeUserName, password };
+      dispatch(loginUser(fields, role))
     }
   };
+
+
 
   const handleInputChange = (event) => {
     const { name } = event.target;
     if (name === "email") setEmailError(false);
     if (name === "password") setPasswordError(false);
     if (name === "frontdeskName") setFrontdeskNameError(false);
+    if (name === "financeUserName") setfinanceUserNameError(false);
   };
 
+  
+
+
   useEffect(() => {
-    if (currentRole === "Admin") {
-      navigate("/AdminDashboard");
-    } else if (currentRole === "Frontdesk") {
-      navigate("/Frontdesk/dashboard");
+    if (status === 'success' || currentUser !== null) {
+        if (currentRole === 'Admin') {
+            navigate('/AdminDashboard');
+        }
+        else if (currentRole === 'FrontDesk') {
+            navigate('/FrontDeskDashboard');
+        } else if (currentRole === 'Finance') {
+            navigate('/FinanceDashboard');
+        }
     }
-  }, [currentRole, navigate]);
+    else if (status === 'failed') {
+        // setMessage(response)
+        // setShowPopup(true)
+        setLoader(false)
+    }
+    else if (status === 'error') {
+        // setMessage("Network Error")
+        // setShowPopup(true)
+        setLoader(false)
+        // setGuestLoader(false)
+    }
+  }, [status, currentRole, navigate, error, response, currentUser]);
+
+
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -172,6 +189,7 @@ const LoginPage = ({ role }) => {
               onSubmit={handleSubmit}
               sx={{ mt: 2, width: "100%" }}
             >
+
               {role === "Frontdesk" ? (
                 <TextField
                   margin="normal"
@@ -185,7 +203,24 @@ const LoginPage = ({ role }) => {
                   error={frontdeskNameError}
                   helperText={frontdeskNameError && "Name is required"}
                   onChange={handleInputChange}
-                />
+                /> ) :
+
+                role === "Finance" ? (
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="financeUserName"
+                    label="Enter your username"
+                    name="financeUserName"
+                    autoComplete="name"
+                    autoFocus
+                    error={financeUserNameError}
+                    helperText={financeUserNameError && "UserName is required"}
+                    onChange={handleInputChange}
+                  /> 
+
+
               ) : (
                 <TextField
                   margin="normal"
@@ -234,7 +269,8 @@ const LoginPage = ({ role }) => {
                 <StyledLink href="#">Forgot password?</StyledLink>
               </Grid>
               <LightBlueButton
-               onClick={handleLoginRedirect} // Navigate on click
+                //onClick={guestModeHandler}
+                //onClick={handleLoginRedirect} // Navigate on click
                 type="submit"
                 fullWidth
                 variant="contained"

@@ -8,7 +8,7 @@ ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, ArcEleme
 const ShowReports = () => {
   // Line chart data for Monthly Contributions
   const lineData = {
-    labels: ['Jan 2024', 'Feb 2024', 'Mar 2024', 'Apr 2024', 'May 2024', 'Jun 2024', 'Jul 2024', 'Aug 2024', 'SEP 2024', 'OCT 2024'],
+    labels: ['Jan 2024', 'Feb 2024', 'Mar 2024', 'Apr 2024', 'May 2024', 'Jun 2024', 'Jul 2024', 'Aug 2024', 'SEP 2024', 'OCT 2024',],
     datasets: [
       {
         label: 'Tithes',

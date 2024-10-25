@@ -12,25 +12,14 @@ import {
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { Settings, Logout } from "@mui/icons-material";
 import { Link } from "react-router-dom";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const open = Boolean(anchorEl);
 
-  // Dummy data for currentUser and currentRole
-  const dummyUserData = {
-    currentRole: "Admin", // or any other role
-    currentUser: {
-      name: "John Doe",
-      email: "john.doe@example.com",
-      avatarUrl: "/static/images/avatar/1.jpg", // Optional: path to the user's avatar
-    },
-  };
-
-  // Use dummy data for demonstration
-  const { currentRole = 'Admin', currentUser = dummyUserData.currentUser } = dummyUserData;
+  const { currentRole, currentUser } = useSelector(state => state.user);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);

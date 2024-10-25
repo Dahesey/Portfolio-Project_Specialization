@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     status: 'idle',
+    frontDeskList: [],
     userDetails: [],
     tempDetails: [],
     loading: false,

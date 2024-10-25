@@ -8,7 +8,6 @@ import {
   } from "@mui/material";
   import styled from "styled-components";
   import { Doughnut } from "react-chartjs-2";
-  import "chart.js/auto";
   import { useState, useEffect } from "react";
   
   const StyledPaper = styled(Paper)`
@@ -23,10 +22,16 @@ import {
     margin-bottom: 16px;
   `;
   
+  const activeEvent = "Mid Week Service on Thurday, October 17 2024"; // Example of an active event
+  
   const FrontDeskHomepage = () => {
     const members = 136;
     const children = 50;
-    const teens = 30; // You can replace this with your actual data
+    const teens = 30;
+  
+    const checkedInMembers = 100; // Example checked-in count
+    // const checkedInChildren = 30; // Example checked-in count for children
+    // const checkedInTeens = 20; // Example checked-in count for teens
   
     const [currentTime, setCurrentTime] = useState(new Date());
     const [currentFormattedDate, setCurrentFormattedDate] = useState("");
@@ -60,7 +65,7 @@ import {
     const teensData = {
       datasets: [
         {
-          data: [teens, 20, 10], // Example data for teens
+          data: [teens, 20, 10],
           backgroundColor: ["#1f618d", "#2ecc71", "#FFCE56"],
           borderWidth: 0,
           cutout: "70%",
@@ -70,7 +75,17 @@ import {
       ],
     };
   
-    //const newMembersByMonth = [0, 3, 5, 2, 4, 7, 8, 6, 9, 10, 12, 11];
+    const checkedInData = {
+      labels: ['Total Members', 'Checked-In'],
+      datasets: [
+        {
+          data: [members, checkedInMembers],
+          backgroundColor: ['#1f618d', '#FF6347'], // Example colors for the chart
+          borderWidth: 0,
+          cutout: '70%',
+        },
+      ],
+    };
   
     useEffect(() => {
       const intervalId = setInterval(() => {
@@ -107,7 +122,23 @@ import {
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <Box sx={{ mb: 4, textAlign: "center" }}>
           <Typography variant="h6">{currentFormattedDate}</Typography>
-          <Typography variant="h6">{currentTime.toLocaleTimeString()}</Typography>
+          <Typography variant="h6">
+            {currentTime.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+              hour12: true,
+            })}
+          </Typography>
+        </Box>
+  
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h6" align="center" gutterBottom>
+            Current Event
+          </Typography>
+          <Typography variant="body1" sx={{ fontWeight: "bold", textAlign: "center" }}>
+            {activeEvent}
+          </Typography>
         </Box>
   
         <Grid container spacing={3}>
@@ -141,12 +172,6 @@ import {
                 <Grid item>
                   <Typography color="#1f618d">Today's Attendance: {members}</Typography>
                 </Grid>
-                {/* <Grid item>
-                  <Typography color="green">Total Active: 100 </Typography>
-                </Grid>
-                <Grid item>
-                  <Typography color="orange">Total Inactive: 36 </Typography>
-                </Grid> */}
               </Grid>
             </StyledPaper>
           </Grid>
@@ -181,12 +206,6 @@ import {
                 <Grid item>
                   <Typography color="#1f618d">Today's Attendance: {children}</Typography>
                 </Grid>
-                {/* <Grid item>
-                  <Typography color="green">Total Active: 40</Typography>
-                </Grid>
-                <Grid item>
-                  <Typography color="orange">Total Inactive: 10</Typography>
-                </Grid> */}
               </Grid>
             </StyledPaper>
           </Grid>
@@ -221,38 +240,37 @@ import {
                 <Grid item>
                   <Typography color="#1f618d">Today's Attendance: {teens}</Typography>
                 </Grid>
-                {/* <Grid item>
-                  <Typography color="green">Total Active: 20</Typography>
-                </Grid>
-                <Grid item>
-                  <Typography color="orange">Total Inactive: 10</Typography>
-                </Grid> */}
               </Grid>
             </StyledPaper>
           </Grid>
   
-          {/* Attendance Overview can be added here if needed */}
-  
+          {/* New Chart for Checked In Members */}
+          <Grid item xs={12}>
+            <StyledPaper>
+              <Title align="center">Checked-In Members</Title>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  position: "relative",
+                  width: "100%",
+                  height: "300px",
+                }}
+              >
+                <Doughnut data={checkedInData} options={{}} />
+              </Box>
+              <Divider />
+              <Grid container justifyContent="space-between" sx={{ p: 2 }}>
+                <Grid item>
+                  <Typography color="#1f618d">
+                    Total Checked-In: {checkedInMembers}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </StyledPaper>
+          </Grid>
         </Grid>
-  
-        <Box sx={{ mt: 4 }}>
-          {/* <Typography variant="h6">
-            New Members This Month: {newMembersByMonth[selectedMonth]}
-          </Typography> */}
-          {/* <FormControl fullWidth sx={{ mb: 2 }}>
-            <InputLabel>Select Month</InputLabel>
-            <Select
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(e.target.value)}
-            >
-              {Array.from({ length: 12 }, (_, index) => (
-                <MenuItem key={index} value={index}>
-                  {new Date(0, index).toLocaleString("default", { month: "long" })}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl> */}
-        </Box>
       </Container>
     );
   };
