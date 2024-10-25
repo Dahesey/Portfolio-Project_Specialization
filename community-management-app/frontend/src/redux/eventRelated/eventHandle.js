@@ -71,35 +71,6 @@ export const fetchEventsList = () => async (dispatch) => {
 
 
 
-// Fetch event details by event ID
-// export const fetchEventDetails = (eventId) => async (dispatch) => {
-//   // Dispatch a request action to indicate loading
-//   dispatch(getRequest());
-
-//   try {
-//     // Make an API request to get the event details by ID
-//     const result = await axios.get(`${BASE_URL}/events/${eventId}`);
-
-//     // Check if the event data is in the response
-//     const eventDetails = result.data; // Assuming event details are returned directly
-
-//     // Dispatch success action if event details are found
-//     if (eventDetails) {
-//       dispatch(getSuccess(eventDetails)); // Dispatch the success action with the event details
-//       return { payload: { eventDetails } }; // Return the event details for further use in the component
-//     } else {
-//       // Dispatch failure action if no event details are found
-//       const message = "Event details not found";
-//       dispatch(getFailed(message));
-//       return { payload: { error: message } }; // Return an error message for further use
-//     }
-//   } catch (error) {
-//     // Dispatch error action if there's a problem with the request
-//     const errorMsg = error.response?.data?.message || error.message || "An error occurred";
-//     dispatch(getError(errorMsg));
-//     return { payload: { error: errorMsg } }; // Return the error for further use
-//   }
-// };
 
 
 
