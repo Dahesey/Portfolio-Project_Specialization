@@ -34,7 +34,7 @@ const AddFrontDesk = () => {
       console.log("STATUS  >>>>>>", status);
       // setMessage(response?.data?.message || "Successfully registered.");
       // setShowPopup(true);
-      setTimeout(() => {
+      setTimeout(() => { 
         setShowPopup(false);
         // navigate(-1); // Navigate back after showing the message
       }, 3000); // Adjust the timeout as needed

@@ -29,6 +29,8 @@ const eventCreate = async (req, res) => {
 
 
 
+
+
   const getAllEvents = async (req, res) => {
     try {
       // Fetch all events from the database
