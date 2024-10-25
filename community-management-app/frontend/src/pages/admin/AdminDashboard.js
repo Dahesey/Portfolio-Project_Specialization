@@ -26,9 +26,7 @@ import AttendanceOverviewPage from './attendanceRelated/AttendanceOverviewPage '
 import ServiceAttendance from './attendanceRelated/ServiceAttendance';
 import MonthlyAttendance from './attendanceRelated/MonthlyAttendance';
 import ShowReports from './reportsRelated/ShowReports';
-import EventOverviewPage from './eventRelated/EventOverviewPage';
-import AddEventPage from './eventRelated/AddEventPage';
-import EventDetails from './eventRelated/EventDetails';
+
 
 import AccountMenu from '../../components/AccountMenu';
 

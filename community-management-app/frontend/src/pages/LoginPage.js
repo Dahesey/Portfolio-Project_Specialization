@@ -34,11 +34,10 @@ const LoginPage = ({ role }) => {
   const { status, currentUser, response, error, currentRole } = useSelector(state => state.user);;
 
   
-  // const handleLoginRedirect = () => {
-  //   const path = "/FrontDeskDashboard"; // Replace with your actual path
-  //   navigate(path);
-  // };
-
+  const handleLoginRedirect = () => {
+    const path = "/FrontDeskDashboard"; // Replace with your actual path
+    navigate(path);
+  };
 
   const [toggle, setToggle] = useState(false)
   // const [guestLoader, setGuestLoader] = useState(false)
