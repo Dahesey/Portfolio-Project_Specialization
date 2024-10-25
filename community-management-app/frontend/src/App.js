@@ -1,6 +1,11 @@
 import React from "react";
-//import { useSelector } from "react-redux";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useSelector } from "react-redux";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Homepage from "./pages/Homepage";
 import ChooseUser from "./pages/ChooseUser";
 import LoginPage from "./pages/LoginPage";
@@ -14,7 +19,7 @@ import FinanceDashboard from "./pages/finance/FinanceDashboard";
 const App = () => {
   const { currentRole } = useSelector((state) => state.user);
 
-  const currentRole = "FrontDesk";
+  // const currentRole = "Admin";
 
   return (
     <Router>

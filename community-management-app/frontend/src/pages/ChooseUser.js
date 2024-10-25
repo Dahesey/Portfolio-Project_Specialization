@@ -5,29 +5,45 @@ import {
   Paper,
   Box,
   Container,
-} from '@mui/material';
-import { AccountCircle } from '@mui/icons-material';
-import styled from 'styled-components';
-import BackgroundImage from '../assets/community8.jpg'; 
-//import LOGO from "../assets/logo.svg";
-import {  useSelector } from 'react-redux';
+  Backdrop,
+  Dialog,
+  CircularProgress,
+} from "@mui/material";
+import { AccountCircle } from "@mui/icons-material";
+import styled from "styled-components";
+import BackgroundImage from "../assets/community8.jpg";
+import { useSelector } from "react-redux";
+// import { loginUser } from "../redux/userRelated/userHandle";
 
-
-
-const ChooseUser = () => {
+const ChooseUser = ({ visitor }) => {
   // const dispatch = useDispatch();
   const navigate = useNavigate();
   // const password = "baby";
 
-  const { currentRole } = useSelector(state => state.user);;
+  const { status, currentUser, currentRole } = useSelector(
+    (state) => state.user
+  );
+
+  const [loader, setLoader] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+  const [message, setMessage] = useState("");
+
+  // const navigateHandler = (user) => {
+  //   // Pass only the user type to the login page
+  //   navigate(`/${user.toLowerCase()}login`, { state: { userType: user } });
+  // };
 
   const navigateHandler = (user) => {
     if (user === "Admin") {
-      navigate('/Adminlogin');
+      if (visitor === "normal") navigate("/Adminlogin");
     } else if (user === "Frontdesk") {
-      navigate('/Frontdesklogin');
+      if (visitor === "normal") {
+        navigate("/Frontdesklogin");
+      }
     } else if (user === "Finance") {
-      navigate('/Financelogin');
+      if (visitor === "normal") {
+        navigate("/Financelogin");
+      }
     }
   };
 
@@ -38,21 +54,29 @@ const ChooseUser = () => {
   // }, [currentRole, navigate]);
 
   useEffect(() => {
-    if (currentRole === 'Admin') {
-      navigate('/AdminDashboard');
+    if (status === "success" || currentUser !== null) {
+      if (currentRole === "Admin") {
+        navigate("/Admin/dashboard");
+      } else if (currentRole === "Frontdesk") {
+        navigate("/Frontdesk/dashboard");
+      } else if (currentRole === "Finance") {
+        navigate("/Finance/dashboard");
+      }
+    } else if (status === "error") {
+      setLoader(false);
+      setMessage("Network Error");
+      setShowDialog(true);
     }
-  }, [currentRole, navigate]);
-
-
+  }, [status, currentRole, navigate, currentUser]);
 
   return (
     <StyledBackground>
       <StyledContainer>
         <Container>
-        <Logo src={LOGO} alt="Logo" />
-          <Grid container spacing={12} justifyContent="center"> {/* Increased spacing here */}
+          {/* <Logo src={LOGO} alt="Logo" /> */}
+          <Grid container spacing={12} justifyContent="center">
             <Grid item xs={12} sm={6} md={4}>
-              <div onClick={() => handleRoleSelect('Admin')}>
+              <div onClick={() => navigateHandler("Admin")}>
                 <StyledPaper elevation={3}>
                   <Box mb={2}>
                     <AccountCircle fontSize="large" />
@@ -64,7 +88,7 @@ const ChooseUser = () => {
               </div>
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-              <div onClick={() => handleRoleSelect('Frontdesk')}>
+              <div onClick={() => navigateHandler("Frontdesk")}>
                 <StyledPaper elevation={3}>
                   <Box mb={2}>
                     <AccountCircle fontSize="large" />
@@ -75,7 +99,7 @@ const ChooseUser = () => {
               </div>
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-              <div onClick={() => handleRoleSelect('Finance')}>
+              <div onClick={() => navigateHandler("Finance")}>
                 <StyledPaper elevation={3}>
                   <Box mb={2}>
                     <AccountCircle fontSize="large" />
