@@ -14,7 +14,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppBar, Drawer } from '../../components/styles';
 import Logout from '../Logout';
 import SideBar from './SideBar';
-import AddMember from './memberRelated/AddMember';
+import FrontDeskProfile from './FrontDeskProfile';
 import FrontDeskHomePage from './FrontDeskHomePage';
 import AccountMenu from '../../components/AccountMenu';
 import MembershipPage from './membership/membershipPage';
@@ -85,6 +85,16 @@ const FrontDeskDashboard = () => {
                         <Route path='*' element={<Navigate to="/" />} />
                         <Route path="/FrontDesk/dashboard" element={<FrontDeskHomePage />} />
                         <Route path="/FrontDesk/profile" element={<FrontDeskProfile />} />
+                        <Route path="/FrontDesk/Membership" element={<MembershipPage />} />
+                        <Route path="/FrontDesk/Membership/Attendance" element={<MemberAttendancePage />} />
+                        <Route path="/FrontDesk/Children/Attendance" element={<ChildrenAttendancePage />} />
+                        <Route path="/FrontDesk/Membership/AddMember" element={<AddMemberPage />} />
+                        <Route path="/FrontDesk/Membership/ViewMember" element={<ViewMemberPage />} />
+                        <Route path="/FrontDesk/Check-in" element={<CheckInPage />} />
+
+
+                        
+
                         <Route path="/logout" element={<Logout />} />
                     </Routes>
                 </Box>
@@ -121,4 +131,3 @@ const styles = {
         },
     },
 }
-
