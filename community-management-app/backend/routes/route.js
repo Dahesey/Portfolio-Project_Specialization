@@ -11,6 +11,8 @@ const { memberRegister, getAllMembers,  getMemberDetail } = require('../controll
 
 const { eventCreate, getAllEvents, getLatestEventID } = require('../controllers/event-controller.js');
 
+const { childRegister, getChildDetail, getAllChildren } = require('../controllers/child-controller.js');
+
 
 
 // Admins
@@ -38,6 +40,14 @@ router.get("/Finance/:id", getFinanceDetail)
 router.post('/MemberReg', memberRegister);
 router.get("/Member/:id", getMemberDetail);
 router.get('/members', getAllMembers)
+
+
+//Member
+router.post('/childrenReg', childRegister);
+router.get("/children/:id", getChildDetail);
+router.get('/children', getAllChildren)
+
+
 
 
 
