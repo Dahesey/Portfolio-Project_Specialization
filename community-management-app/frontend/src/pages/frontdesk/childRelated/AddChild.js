@@ -70,7 +70,7 @@ const AddChildPage = () => {
       setAge(age); // Update the age state
 
       // Determine age category
-      if (age >= 14 && age <= 21) {
+      if (age >= 13 && age <= 19) {
         setChildData((prevData) => ({ ...prevData, ageCategory: "Teen" }));
       } else {
         setChildData((prevData) => ({ ...prevData, ageCategory: "Child" }));

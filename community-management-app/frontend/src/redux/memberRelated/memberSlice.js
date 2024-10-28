@@ -16,7 +16,9 @@ const initialState = {
       },
       getSuccess: (state, action) => {
         state.loading = false;
-        state.members = action.payload;  // Ensure the payload here matches the data format
+        state.members = action.payload; 
+        state.status = "success"
+         // Ensure the payload here matches the data format
       },
       getFailed: (state, action) => {
         state.loading = false;
