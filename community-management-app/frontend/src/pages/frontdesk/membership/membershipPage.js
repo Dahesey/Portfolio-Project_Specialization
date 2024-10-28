@@ -41,7 +41,7 @@ const MembershipPage = () => {
             onClick={() => navigate("/FrontDesk/Membership/AddMember")}
           >
             <AddIcon fontSize="large" />
-            <Typography variant="h6">ADD NEW MEMBER</Typography>
+            <Typography variant="h6">ADD MEMBER</Typography>
           </Paper>
         </Grid>
 
@@ -67,6 +67,59 @@ const MembershipPage = () => {
           >
             <AddIcon fontSize="large" />
             <Typography variant="h6">VIEW MEMBERS</Typography>
+          </Paper>
+        </Grid>
+
+
+        <Grid item>
+          <Paper
+            sx={{
+              width: "250px", // Increased width
+              height: "200px", // Increased height
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "#0097A7",
+              color: "white",
+              borderRadius: "20px",
+              textAlign: "center",
+              cursor: "pointer",
+              "&:hover": {
+                backgroundColor: "#00796B",
+              },
+            }}
+            onClick={() => navigate("/FrontDesk/Children/AddChild")}
+          >
+            <AddIcon fontSize="large" />
+            <Typography variant="h6">ADD CHILDREN & TEENS</Typography>
+          </Paper>
+        </Grid>
+
+
+        
+        <Grid item>
+          <Paper
+            sx={{
+              width: "250px", // Increased width
+              height: "200px", // Increased height
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "#0097A7",
+              color: "white",
+              borderRadius: "20px",
+              textAlign: "center",
+              cursor: "pointer",
+              "&:hover": {
+                backgroundColor: "#00796B",
+              },
+            }}
+            onClick={() => navigate("/FrontDesk/Children/ViewChildren")}
+          >
+            <AddIcon fontSize="large" />
+            <Typography variant="h6">VIEW CHILDREN & TEENS</Typography>
           </Paper>
         </Grid>
 

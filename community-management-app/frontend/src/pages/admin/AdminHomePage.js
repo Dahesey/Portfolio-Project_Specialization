@@ -16,6 +16,7 @@ import "chart.js/auto";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchMembersList } from "../../redux/memberRelated/memberHandle";
+import { fetchChildrenList } from "../../redux/childRelated/childHandle"
 
 const StyledPaper = styled(Paper)`
   padding: 16px;
@@ -32,39 +33,66 @@ const Title = styled(Typography)`
 const AdminHomePage = () => {
   const dispatch = useDispatch();
   const [members, setMembers] = useState(0);
-  // const members = 136;
-  const children = 50;
-  const teens = 30; // You can replace this with your actual data
-
+  const [children, setChildren] = useState(0);
+  const [teens, setTeens] = useState(0);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [currentFormattedDate, setCurrentFormattedDate] = useState("");
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+  const [newMembersByMonth, setNewMembersByMonth] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]); // Example placeholder for new members count
 
   useEffect(() => {
     const fetchMembers = async () => {
       try {
         const resultAction = await dispatch(fetchMembersList());
         const membersData = resultAction.payload?.members;
-        console.log("MEMBERS  >>>>>>>", resultAction);
 
         if (Array.isArray(membersData)) {
-          setMembers(membersData.length); // Set members to the total number of fetched members
+          setMembers(membersData.length);
         } else {
-          console.error(
-            "Failed to fetch members:",
-            resultAction.payload?.error || "Unknown error"
-          );
+          console.error("Failed to fetch members:", resultAction.payload?.error || "Unknown error");
         }
       } catch (error) {
-        console.error(
-          "Error fetching members:",
-          error?.message || "Unknown error"
-        );
+        console.error("Error fetching members:", error?.message || "Unknown error");
+      }
+    };
+
+    const fetchChildren = async () => {
+      try {
+        const resultAction = await dispatch(fetchChildrenList());
+        const childrenData = resultAction.payload?.children;
+
+        if (Array.isArray(childrenData)) {
+          const currentYear = new Date().getFullYear();
+          const childCount = childrenData.filter(child => {
+            const birthYear = new Date(child.dob).getFullYear();
+            return currentYear - birthYear < 13; // Age less than 13 is considered a child
+          }).length;
+
+          const teenCount = childrenData.filter(child => {
+            const birthYear = new Date(child.dob).getFullYear();
+            return currentYear - birthYear >= 13 && currentYear - birthYear < 20; // Age 13 to 19 is considered a teen
+          }).length;
+
+          setChildren(childCount);
+          setTeens(teenCount);
+        } else {
+          console.error("Failed to fetch children:", resultAction.payload?.error || "Unknown error");
+        }
+      } catch (error) {
+        console.error("Error fetching children:", error?.message || "Unknown error");
       }
     };
 
     fetchMembers();
+    fetchChildren();
   }, [dispatch]);
+
+  useEffect(() => {
+    // Example logic to populate new members count by month
+    // Replace with actual logic to fetch this data
+    const newMembersExample = [5, 3, 8, 6, 0, 12, 4, 2, 1, 9, 10, 7]; // Placeholder data
+    setNewMembersByMonth(newMembersExample);
+  }, []);
 
   const membersData = {
     datasets: [
@@ -82,7 +110,7 @@ const AdminHomePage = () => {
   const childrenData = {
     datasets: [
       {
-        data: [children, 40, 10],
+        data: [children, children, 0],
         backgroundColor: ["#1f618d", "#2ecc71", "#FFCE56"],
         borderWidth: 0,
         cutout: "70%",
@@ -95,7 +123,7 @@ const AdminHomePage = () => {
   const teensData = {
     datasets: [
       {
-        data: [teens, 20, 10], // Example data for teens
+        data: [teens, teens, 0],
         backgroundColor: ["#1f618d", "#2ecc71", "#FFCE56"],
         borderWidth: 0,
         cutout: "70%",
@@ -104,8 +132,6 @@ const AdminHomePage = () => {
       },
     ],
   };
-
-  const newMembersByMonth = [5, 3, 5, 2, 4, 7, 8, 6, 9, 10, 12, 11];
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -167,14 +193,12 @@ const AdminHomePage = () => {
                   fontSize: "2rem",
                   fontWeight: "900", 
                   color: "#333",
-                  // fontFamily: "'Bungee Tint", // Change the font family for a unique style
                   letterSpacing: "0.1rem", 
                   textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)", 
                 }}
               >
                 {members}
               </Typography>
-
               <Doughnut data={membersData} options={{}} />
             </Box>
             <Divider />
@@ -185,10 +209,10 @@ const AdminHomePage = () => {
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography color="green">Total Active: {members} </Typography>
+                <Typography color="green">Total Active: {members}</Typography>
               </Grid>
               <Grid item>
-                <Typography color="orange">Total Inactive: 0 </Typography>
+                <Typography color="orange">Total Inactive: 0</Typography>
               </Grid>
             </Grid>
           </StyledPaper>
@@ -215,7 +239,6 @@ const AdminHomePage = () => {
                   fontSize: "2rem",
                   fontWeight: "900", 
                   color: "#333",
-                  // fontFamily: "'Bungee Tint", // Change the font family for a unique style
                   letterSpacing: "0.1rem", 
                   textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)", 
                 }}
@@ -232,10 +255,10 @@ const AdminHomePage = () => {
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography color="green">Total Active: 40</Typography>
+                <Typography color="green">Total Active: {children}</Typography>
               </Grid>
               <Grid item>
-                <Typography color="orange">Total Inactive: 10</Typography>
+                <Typography color="orange">Total Inactive: 0 </Typography>
               </Grid>
             </Grid>
           </StyledPaper>
@@ -262,7 +285,6 @@ const AdminHomePage = () => {
                   fontSize: "2rem",
                   fontWeight: "900", 
                   color: "#333",
-                  // fontFamily: "'Bungee Tint", // Change the font family for a unique style
                   letterSpacing: "0.1rem", 
                   textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)", 
                 }}
@@ -279,18 +301,18 @@ const AdminHomePage = () => {
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography color="green">Total Active: 20</Typography>
+                <Typography color="green">Total Active: {teens}</Typography>
               </Grid>
               <Grid item>
-                <Typography color="orange">Total Inactive: 10</Typography>
+                <Typography color="orange">Total Inactive: 0</Typography>
               </Grid>
             </Grid>
           </StyledPaper>
         </Grid>
-
-        {/* Attendance Overview can be added here if needed */}
       </Grid>
 
+      {/* Attendance Overview can be added here if needed */}
+      
       <Box sx={{ mt: 4 }}>
         <Typography variant="h6" padding={"1rem"}>
           New Members This Month: {newMembersByMonth[selectedMonth]}
