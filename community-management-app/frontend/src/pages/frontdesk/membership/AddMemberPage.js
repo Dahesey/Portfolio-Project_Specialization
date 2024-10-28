@@ -12,11 +12,16 @@ import {
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { addMember } from "../../../redux/memberRelated/memberHandle";
+import { underControl } from "../../../redux/userRelated/userSlice";
 import { useNavigate } from "react-router-dom";
 
 const AddMemberPage = () => {
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+
+  dispatch(underControl())
   const { status, response, error } = useSelector((state) => state.user);
 
   const [memberType, setMemberType] = useState("New Member");
@@ -31,10 +36,10 @@ const AddMemberPage = () => {
     gender: "",
     department: "", // For Existing Member
     occupation: "",
-    contributionToWelfare: "",
+    contributionToWelfare: "No",
     memberSince: null,
     numberOfChildren: "",
-    tithePayer: "",
+    tithePayer: "No",
     reasonForVisit: "", // For Guest Member
   });
 
@@ -111,10 +116,10 @@ const AddMemberPage = () => {
   //   }
 
 
-  console.log("AT START  >>>> ",)
+  console.log("AT START  >>>> ", status)
   
   useEffect(() => {
-    console.log("AT RESPONSE  >>>> ", response)
+    console.log("AT RESPONSE WHEN USER IS CREATED   >>>> ", status)
 
     if (status === "success") {
       console.log("AT SUCCESS  >>>> ", status)

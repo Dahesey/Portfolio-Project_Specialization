@@ -60,6 +60,12 @@ const userSlice = createSlice({
             state.error = null;
             state.response = null;
         },
+
+        addMemberSuccess: (state) => {
+            state.status = "success"
+        },
+
+
         getDeleteSuccess: (state) => {
             state.loading = false;
             state.error = null;
@@ -94,6 +100,7 @@ export const {
     authLogout,
     doneSuccess,
     getDeleteSuccess,
+    addMemberSuccess,
     getRequest,
     getFailed,
     getError,

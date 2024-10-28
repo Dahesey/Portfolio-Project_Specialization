@@ -3,6 +3,8 @@ import {
   getRequest, getSuccess, getFailed, getError
 } from './memberSlice';
 
+import {addMemberSuccess} from '../../redux/userRelated/userSlice'
+
 const BASE_URL = 'http://localhost:5000';
 
 // Fetch the list of members
@@ -51,7 +53,9 @@ export const addMember = (newMemberData) => async (dispatch) => {
   // Ensure the newMemberData contains the correct fields based on member type
   try {
     const result = await axios.post(`${BASE_URL}/MemberReg`, newMemberData);
-    dispatch(getSuccess(result.data));  // Dispatch success with the new member data
+    dispatch(addMemberSuccess())
+    dispatch(getSuccess(result.data));  
+    console.log("I AM HERE >>>>>>>>>>>>>>>>>>>  ")
     return { payload: result.data };
   } catch (error) {
     const errorMsg = error.response?.data?.message || error.message || "An error occurred";
