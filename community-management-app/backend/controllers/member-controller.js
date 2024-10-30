@@ -1,30 +1,6 @@
 // const bcrypt = require('bcrypt');
 const Member = require('../models/memberSchema.js');
 
-// Register a new member
-// const memberRegister = async (req, res) => {
-//     try {
-//         const member = new Member({
-//             ...req.body,
-//         });
-
-//         // Check if the Member name already exists
-//         const existingMemberByName = await Member.findOne({ name: req.body.name });
-
-//         if (existingMemberByName) {
-//             return res.status(400).json({ message: 'Member Name already exists' });
-//         }
-
-//         // Save the new Member
-//         let result = await member.save();
-//         // result.password = undefined; // Do not return the password in the response
-//         return res.status(201).json({ message: 'Successfully registered.', member: result }); // Set status to 201 for resource created
-//     } catch (err) {
-//         console.error(err); // Log the error for debugging
-//         return res.status(500).json({ message: 'Server error', error: err.message }); // Send a clear error message
-//     }
-// };
-
 
 const memberRegister = async (req, res) => {
     try {
@@ -85,88 +61,34 @@ const getAllMembers = async (req, res) => {
     }
 };
 
-module.exports = { memberRegister, getMemberDetail, getAllMembers };
+
+// Update a member by ID
+const updateMember = async (req, res) => {
+    try {
+        const memberId = req.params.id;
+        const updatedData = req.body;
+
+        // Find and update the member, returning the updated document
+        const updatedMember = await Member.findByIdAndUpdate(
+            memberId,
+            updatedData,
+            { new: true } // `new: true` returns the modified document
+        );
+
+        if (!updatedMember) {
+            return res.status(404).json({ message: 'Member not found' }); // Return 404 if member not found
+        }
+
+        return res.status(200).json({
+            message: 'Member updated successfully',
+            member: updatedMember
+        });
+    } catch (err) {
+        console.error(err); // Log error for debugging
+        return res.status(500).json({ message: 'Server error', error: err.message }); // Send a clear error message
+    }
+};
 
 
+module.exports = { memberRegister, getMemberDetail, getAllMembers, updateMember };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // const bcrypt = require('bcrypt');
-// const Member = require('../models/memberSchema.js');
-
-
-// const memberRegister = async (req, res) => {
-//     try {
-
-//         const member = new Member({
-//             ...req.body,
-            
-//         });
-
-
-//         // Check if the Member name already exists
-//         const existingMemberByName = await Member.findOne({ name: req.body.name });
-
-//         if (existingMemberByName) {
-//             return res.status(400).json({ message: 'Member Name already exists' });
-//         } 
-
-//         // Save the new Member
-//         let result = await member.save();
-//         // result.password = undefined; // Do not return the password in the response
-//         return res.status(201).json({ message: 'Successfully registered.', member: result }); // Set status to 201 for resource created
-//     } catch (err) {
-//         console.error(err); // Log the error for debugging
-//         return res.status(500).json({ message: 'Server error', error: err.message }); // Send a clear error message
-//     }
-// };
-
-
-
-
-// const getMemberDetail = async (req, res) => {
-//     try {
-//         let member = await Member.findById(req.params.id);
-//         if (member) {
-//             // member.password = undefined;
-//             res.send(member);
-//         } else {
-//             res.send({ message: "No Member found" });
-//         }
-//     } catch (err) {
-//         res.status(500).json(err);
-//     }
-// }
-
-
-// module.exports = { memberRegister, getMemberDetail };

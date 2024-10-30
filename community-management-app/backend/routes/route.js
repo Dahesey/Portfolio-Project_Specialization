@@ -3,7 +3,7 @@ const router = require('express').Router();
 // const { adminRegister, adminLogIn, deleteAdmin, getAdminDetail, updateAdmin } = require('../controllers/admin-controller.js');
 
 const { adminRegister, adminLogIn, getAdminDetail} = require('../controllers/admin-controller.js');
-const { frontdeskRegister, frontdeskLogIn, getFrontDeskDetail} = require('../controllers/frontdesk-controller.js');
+const { frontdeskRegister, frontdeskLogIn, getFrontdeskDetails, getAllFrontdesks } = require('../controllers/frontdesk-controller.js');
 
 const { financeRegister, financeLogIn, getFinanceDetail} = require('../controllers/finance-controller.js');
 
@@ -26,7 +26,9 @@ router.get("/Admin/:id", getAdminDetail)
 //FrontDesk
 router.post('/FrontdeskReg', frontdeskRegister);
 router.post('/Frontdesklogin', frontdeskLogIn);
-router.get("/FrontDesk/:id", getFrontDeskDetail)
+router.get("/FrontDesk/:id", getFrontdeskDetails)
+router.get("/FrontDesk", getAllFrontdesks)
+
 
 
 //Finance
@@ -58,12 +60,6 @@ router.get('/latestEventID', getLatestEventID);
 router.get('/events', getAllEvents);  
 
 // router.get("/Event/:id", getEventDetail)
-
-
-
-
-
-
 
 
 

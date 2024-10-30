@@ -9,12 +9,10 @@ import {
   Tooltip
 } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
-// import FinanceIcon from '@mui/icons-material/AttachMoney';
-// import ReportIcon from '@mui/icons-material/Assessment';
 import HomeIcon from "@mui/icons-material/Home";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-//import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import AttendanceIcon from '@mui/icons-material/EventAvailable';
 
 const SideBar = ({ isSidebarExpanded }) => {
@@ -45,10 +43,10 @@ const SideBar = ({ isSidebarExpanded }) => {
         </ListItemButton>
 
         {/* Check-in */}
-        <ListItemButton component={Link} to="/FrontDesk/Check-in">
+        <ListItemButton component={Link} to="/FrontDesk/Checkin">
           <Tooltip title="Check-in" placement="right" arrow disableHoverListener={isSidebarExpanded}>
             <ListItemIcon>
-              <PersonOutlineIcon color={location.pathname.startsWith('/FrontDesk/Check-in') ? 'primary' : 'inherit'} />
+              <PersonOutlineIcon color={location.pathname.startsWith('/FrontDesk/Checkin') ? 'primary' : 'inherit'} />
             </ListItemIcon>
           </Tooltip>
           {isSidebarExpanded && <ListItemText primary="Check-in" />}
@@ -62,6 +60,18 @@ const SideBar = ({ isSidebarExpanded }) => {
         <ListSubheader component="div" inset>
           User
         </ListSubheader>
+
+        <ListItemButton component={Link} to="/Frontdesk/profile">
+          <Tooltip title="Profile" placement="right" arrow disableHoverListener={isSidebarExpanded}>
+            <ListItemIcon>
+              <AccountCircleOutlinedIcon color={location.pathname.startsWith("/Frontdesk/profile") ? 'primary' : 'inherit'} />
+            </ListItemIcon>
+          </Tooltip>
+          {isSidebarExpanded && <ListItemText primary="Profile" />}
+        </ListItemButton>
+
+
+
 
         <ListItemButton component={Link} to="/logout">
           <Tooltip title="Logout" placement="right" arrow disableHoverListener={isSidebarExpanded}>

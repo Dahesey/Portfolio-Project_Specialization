@@ -38,8 +38,10 @@ const adminSchema = new mongoose.Schema({
         enum: ['Male', 'Female'], 
         required: [true, 'Gender is required'],
     },
-
-
+    dateAdded: {
+        type: Date,
+        default: Date.now,
+    },
 
 });
 

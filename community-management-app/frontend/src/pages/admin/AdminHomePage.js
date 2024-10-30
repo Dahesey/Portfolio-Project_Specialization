@@ -16,8 +16,10 @@ import "chart.js/auto";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchMembersList } from "../../redux/memberRelated/memberHandle";
-import { fetchChildrenList } from "../../redux/childRelated/childHandle"
+import { fetchChildrenList } from "../../redux/childRelated/childHandle";
+import { fetchEventsList } from "../../redux/eventRelated/eventHandle"; 
 
+// Styled components
 const StyledPaper = styled(Paper)`
   padding: 16px;
   display: flex;
@@ -30,6 +32,7 @@ const Title = styled(Typography)`
   margin-bottom: 16px;
 `;
 
+
 const AdminHomePage = () => {
   const dispatch = useDispatch();
   const [members, setMembers] = useState(0);
@@ -38,7 +41,9 @@ const AdminHomePage = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [currentFormattedDate, setCurrentFormattedDate] = useState("");
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-  const [newMembersByMonth, setNewMembersByMonth] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]); // Example placeholder for new members count
+  const [newMembersByMonth, setNewMembersByMonth] = useState(Array(12).fill(0)); // Array to hold member counts for each month
+  const [activeEvent, setActiveEvent] = useState("No active event "); // Placeholder for the current event
+  const [upcomingEvent, setUpcomingEvent] = useState("No upcoming event "); // Placeholder for the upcoming event
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -48,6 +53,18 @@ const AdminHomePage = () => {
 
         if (Array.isArray(membersData)) {
           setMembers(membersData.length);
+
+          // Initialize an array to hold the count of new members by month
+          const newMembersCount = Array(12).fill(0);
+          
+          // Process members data to count new members per month
+          membersData.forEach((member) => {
+            const dateAdded = new Date(member.dateAdded);
+            const month = dateAdded.getMonth();
+            newMembersCount[month] += 1; // Increment count for the respective month
+          });
+
+          setNewMembersByMonth(newMembersCount); // Update the state with the calculated counts
         } else {
           console.error("Failed to fetch members:", resultAction.payload?.error || "Unknown error");
         }
@@ -83,17 +100,51 @@ const AdminHomePage = () => {
       }
     };
 
+    const fetchEvents = async () => {
+      try {
+        const resultAction = await dispatch(fetchEventsList());
+        const eventsData = resultAction.payload?.events;
+
+        if (Array.isArray(eventsData)) {
+          determineEvents(eventsData);
+        } else {
+          console.error(
+            "Failed to fetch events:",
+            resultAction.payload?.error || "Unknown error"
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
+
+    const determineEvents = (events) => {
+      let closestEvent = null;
+      let closestDaysLeft = Infinity;
+
+      events.forEach(event => {
+        const daysLeft = event.countdown ? parseInt(event.countdown.split(" ")[0]) : Infinity;
+
+        if (daysLeft === 0) {
+          setActiveEvent(event.eventName);
+        } else if (daysLeft > 0 && daysLeft < closestDaysLeft) {
+          closestDaysLeft = daysLeft;
+          closestEvent = event.eventName;
+        }
+      });
+
+      if (closestEvent) {
+        setUpcomingEvent(closestEvent);
+      }
+    };
+
+
     fetchMembers();
     fetchChildren();
+    fetchEvents();
   }, [dispatch]);
 
-  useEffect(() => {
-    // Example logic to populate new members count by month
-    // Replace with actual logic to fetch this data
-    const newMembersExample = [5, 3, 8, 6, 0, 12, 4, 2, 1, 9, 10, 7]; // Placeholder data
-    setNewMembersByMonth(newMembersExample);
-  }, []);
-
+  // Doughnut chart data setup
   const membersData = {
     datasets: [
       {
@@ -171,6 +222,34 @@ const AdminHomePage = () => {
         <Typography variant="h6">{currentTime.toLocaleTimeString()}</Typography>
       </Box>
 
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 4 }}>
+  {/* Current Event Box */}
+  <Box sx={{ flex: 1, mx: 2, padding: 2, border: '1px solid #ccc', borderRadius: 2, bgcolor: '#f5f5f5' }}>
+    <Typography variant="h5" align="center" gutterBottom sx={{ fontWeight: 'bold' }}>
+      Current Event
+    </Typography>
+    <Typography
+      variant="body1"
+      sx={{ fontWeight: 'light', textAlign: 'center', fontSize: '1.25rem' }} 
+    >
+      {activeEvent || "No active event"}
+    </Typography>
+  </Box>
+
+  {/* Upcoming Event Box */}
+  <Box sx={{ flex: 1, mx: 2, padding: 2, border: '1px solid #ccc', borderRadius: 2, bgcolor: '#f5f5f5' }}>
+    <Typography variant="h5" align="center" gutterBottom sx={{ fontWeight: 'bold' }}>
+      Upcoming Event
+    </Typography>
+    <Typography
+      variant="body1"
+      sx={{ fontWeight: 'light', textAlign: 'center', fontSize: '1.25rem' }} 
+    >
+      {upcomingEvent || "No upcoming event"}
+    </Typography>
+  </Box>
+</Box>
+
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <StyledPaper>
@@ -185,7 +264,7 @@ const AdminHomePage = () => {
                 height: "200px",
               }}
             >
-              <Typography
+               <Typography
                 variant="h4" 
                 sx={{
                   paddingTop: "2rem",
@@ -232,15 +311,15 @@ const AdminHomePage = () => {
               }}
             >
               <Typography
-                variant="h4" 
+                variant="h4"
                 sx={{
                   paddingTop: "2rem",
                   position: "absolute",
                   fontSize: "2rem",
-                  fontWeight: "900", 
+                  fontWeight: "900",
                   color: "#333",
-                  letterSpacing: "0.1rem", 
-                  textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)", 
+                  letterSpacing: "0.1rem",
+                  textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
                 }}
               >
                 {children}
@@ -258,7 +337,7 @@ const AdminHomePage = () => {
                 <Typography color="green">Total Active: {children}</Typography>
               </Grid>
               <Grid item>
-                <Typography color="orange">Total Inactive: 0 </Typography>
+                <Typography color="orange">Total Inactive: 0</Typography>
               </Grid>
             </Grid>
           </StyledPaper>
@@ -278,15 +357,15 @@ const AdminHomePage = () => {
               }}
             >
               <Typography
-                variant="h4" 
+                variant="h4"
                 sx={{
                   paddingTop: "2rem",
                   position: "absolute",
                   fontSize: "2rem",
-                  fontWeight: "900", 
+                  fontWeight: "900",
                   color: "#333",
-                  letterSpacing: "0.1rem", 
-                  textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)", 
+                  letterSpacing: "0.1rem",
+                  textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
                 }}
               >
                 {teens}
@@ -311,28 +390,32 @@ const AdminHomePage = () => {
         </Grid>
       </Grid>
 
-      {/* Attendance Overview can be added here if needed */}
       
-      <Box sx={{ mt: 4 }}>
-        <Typography variant="h6" padding={"1rem"}>
-          New Members This Month: {newMembersByMonth[selectedMonth]}
-        </Typography>
-        <InputLabel padding={"5rem"}>Select Month</InputLabel>
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <Select
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value)}
-          >
-            {Array.from({ length: 12 }, (_, index) => (
-              <MenuItem key={index} value={index}>
-                {new Date(0, index).toLocaleString("default", {
-                  month: "long",
-                })}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>
+
+      <Grid item xs={12}>
+          <StyledPaper>
+            <Title align="center">New Members by Month</Title>
+            <FormControl fullWidth>
+              <InputLabel id="month-select-label">Select Month</InputLabel>
+              <Select
+                labelId="month-select-label"
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(e.target.value)}
+              >
+                {Array.from({ length: 12 }, (_, i) => (
+                  <MenuItem key={i} value={i}>
+                    {new Date(0, i).toLocaleString("default", { month: "long" })}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Box sx={{ pt: 3, textAlign: 'center' }}>
+              <Typography variant="h5">
+                New Members Added: {newMembersByMonth[selectedMonth]}
+              </Typography>
+            </Box>
+          </StyledPaper>
+        </Grid>
     </Container>
   );
 };

@@ -25,6 +25,7 @@ import CheckInPage from './membership/CheckInPage';
 import ViewMemberPage from './membership/ViewMemberPage';
 import AddChildPage from './childRelated/AddChild';
 import ChildDetails from './childRelated/ChildDetails';
+import FrontdeskProfile from './FrontDeskProfile';
 
 const FrontDeskDashboard = () => {
     const [open, setOpen] = useState(false);
@@ -88,13 +89,17 @@ const FrontDeskDashboard = () => {
                         <Route path="/FrontDesk/dashboard" element={<FrontDeskHomePage />} />
                         <Route path="/FrontDesk/profile" element={<FrontDeskProfile />} />
                         <Route path="/FrontDesk/Membership" element={<MembershipPage />} />
-                        <Route path="/FrontDesk/Membership/Attendance" element={<MemberAttendancePage />} />
+                        <Route path="/FrontDesk/Checkin/Attendance" element={<MemberAttendancePage />} />
                         <Route path="/FrontDesk/Children/Attendance" element={<ChildrenAttendancePage />} />
                         <Route path="/FrontDesk/Membership/AddMember" element={<AddMemberPage />} />
                         <Route path="/FrontDesk/Children/AddChild" element={<AddChildPage />} />
                         <Route path="/FrontDesk/Membership/ViewMember" element={<ViewMemberPage />} />
                         <Route path="/FrontDesk/Children/ViewChildren" element={<ChildDetails />} />
-                        <Route path="/FrontDesk/Check-in" element={<CheckInPage />} />
+                        <Route path="/FrontDesk/Checkin" element={<CheckInPage />} />
+                        <Route path="/Frontdesk/profile" element={<FrontdeskProfile />} />
+
+                        
+
 
 
 

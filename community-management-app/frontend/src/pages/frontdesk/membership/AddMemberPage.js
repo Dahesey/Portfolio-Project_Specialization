@@ -12,7 +12,7 @@ import {
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { addMember } from "../../../redux/memberRelated/memberHandle";
-import { underControl } from "../../../redux/userRelated/userSlice";
+// import { underControl } from "../../../redux/userRelated/userSlice";
 import { useNavigate } from "react-router-dom";
 
 const AddMemberPage = () => {
@@ -21,7 +21,8 @@ const AddMemberPage = () => {
   const navigate = useNavigate();
 
 
-  dispatch(underControl())
+  // dispatch(underControl())
+  // const [newMemberCreated, setNewMemberCreated ] = useState(false)
   const { status, response, error } = useSelector((state) => state.user);
 
   const [memberType, setMemberType] = useState("New Member");
@@ -123,7 +124,7 @@ const AddMemberPage = () => {
 
     if (status === "success") {
       console.log("AT SUCCESS  >>>> ", status)
-      setShowSuccessPopup(true);
+      // setShowSuccessPopup(true);
       setTimeout(() => {
         dispatch({ type: "CLEAR_STATUS" }); // Clears the status in Redux after a successful add
       }, 3000); // Matches autoHideDuration

@@ -63,19 +63,37 @@ const frontdeskLogIn = async (req, res) => {
     }
 };
 
-const getFrontDeskDetail = async (req, res) => {
+const getFrontdeskDetails = async (req, res) => {
     try {
-        let admin = await Admin.findById(req.params.id);
-        if (admin) {
-            admin.password = undefined;
-            res.send(admin);
-        } else {
-            res.send({ message: "No admin found" });
+        const frontdeskId = req.params.id;
+
+        // Fetch frontdesk details by ID, excluding the password field
+        const frontdesk = await Frontdesk.findById(frontdeskId, { password: 0 });
+        
+        if (!frontdesk) {
+            return res.status(404).json({ message: "Frontdesk personnel not found" });
         }
-    } catch (err) {
-        res.status(500).json(err);
+
+        return res.status(200).json({ frontdesk });
+    } catch (error) {
+        console.error("Error fetching frontdesk details:", error);
+        return res.status(500).json({ message: "Server error", error: error.message });
     }
-}
+};
 
 
-module.exports = { frontdeskRegister, frontdeskLogIn, getFrontDeskDetail };
+
+const getAllFrontdesks = async (req, res) => {
+    try {
+        // Retrieve all frontdesk personnel from the database, excluding passwords
+        const frontdesks = await Frontdesk.find().select('-password');
+        
+        // Return the list of frontdesks
+        return res.status(200).json({ frontdesks });
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        return res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+module.exports = { frontdeskRegister, frontdeskLogIn, getFrontdeskDetails, getAllFrontdesks };

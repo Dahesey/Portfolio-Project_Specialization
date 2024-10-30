@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchMembersList } from "../../redux/memberRelated/memberHandle";
 import { fetchChildrenList } from "../../redux/childRelated/childHandle";
+import { fetchEventsList } from "../../redux/eventRelated/eventHandle"; 
 
 const StyledPaper = styled(Paper)`
   padding: 16px;
@@ -25,13 +26,14 @@ const Title = styled(Typography)`
   margin-bottom: 16px;
 `;
 
-const activeEvent = "Mid Week Service on Thurday, October 17 2024"; // Example of an active event
-
 const FrontDeskHomepage = () => {
   const dispatch = useDispatch();
   const [members, setMembers] = useState(0);
   const [children, setChildren] = useState(0);
   const [teens, setTeens] = useState(0);
+  
+  const [activeEvent, setActiveEvent] = useState(null);
+  const [upcomingEvent, setUpcomingEvent] = useState(null);
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -64,14 +66,14 @@ const FrontDeskHomepage = () => {
           const currentYear = new Date().getFullYear();
           const childCount = childrenData.filter((child) => {
             const birthYear = new Date(child.dob).getFullYear();
-            return currentYear - birthYear < 13; // Age less than 13 is considered a child
+            return currentYear - birthYear < 13;
           }).length;
 
           const teenCount = childrenData.filter((child) => {
             const birthYear = new Date(child.dob).getFullYear();
             return (
               currentYear - birthYear >= 13 && currentYear - birthYear < 20
-            ); // Age 13 to 19 is considered a teen
+            );
           }).length;
 
           setChildren(childCount);
@@ -90,15 +92,56 @@ const FrontDeskHomepage = () => {
       }
     };
 
+    const fetchEvents = async () => {
+      try {
+        const resultAction = await dispatch(fetchEventsList());
+        const eventsData = resultAction.payload?.events;
+
+        if (Array.isArray(eventsData)) {
+          determineEvents(eventsData);
+        } else {
+          console.error(
+            "Failed to fetch events:",
+            resultAction.payload?.error || "Unknown error"
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
+
+    const determineEvents = (events) => {
+      let closestEvent = null;
+      let closestDaysLeft = Infinity;
+
+      events.forEach(event => {
+        const daysLeft = event.countdown ? parseInt(event.countdown.split(" ")[0]) : Infinity;
+
+        if (daysLeft === 0) {
+          setActiveEvent(event.eventName);
+        } else if (daysLeft > 0 && daysLeft < closestDaysLeft) {
+          closestDaysLeft = daysLeft;
+          closestEvent = event.eventName;
+        }
+      });
+
+      if (closestEvent) {
+        setUpcomingEvent(closestEvent);
+      }
+    };
+
+  
+
     fetchMembers();
     fetchChildren();
+    fetchEvents();
   }, [dispatch]);
 
   // const members = 136;
   // const children = 50;
   // const teens = 30;
 
-  const checkedInMembers = 100; // Example checked-in count
+  // const checkedInMembers = 100; // Example checked-in count
   // const checkedInChildren = 30; // Example checked-in count for children
   // const checkedInTeens = 20; // Example checked-in count for teens
 
@@ -144,17 +187,17 @@ const FrontDeskHomepage = () => {
     ],
   };
 
-  const checkedInData = {
-    labels: ["Total Members", "Checked-In"],
-    datasets: [
-      {
-        data: [members, checkedInMembers],
-        backgroundColor: ["#1f618d", "#FF6347"], // Example colors for the chart
-        borderWidth: 0,
-        cutout: "70%",
-      },
-    ],
-  };
+  // const checkedInData = {
+  //   labels: ["Total Members", "Checked-In"],
+  //   datasets: [
+  //     {
+  //       data: [members, checkedInMembers],
+  //       backgroundColor: ["#1f618d", "#FF6347"], // Example colors for the chart
+  //       borderWidth: 0,
+  //       cutout: "70%",
+  //     },
+  //   ],
+  // };
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -201,22 +244,39 @@ const FrontDeskHomepage = () => {
         </Typography>
       </Box>
 
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h6" align="center" gutterBottom>
-          Current Event
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{ fontWeight: "bold", textAlign: "center" }}
-        >
-          {activeEvent}
-        </Typography>
-      </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 4 }}>
+  {/* Current Event Box */}
+  <Box sx={{ flex: 1, mx: 2, padding: 2, border: '1px solid #ccc', borderRadius: 2, bgcolor: '#f5f5f5' }}>
+    <Typography variant="h5" align="center" gutterBottom sx={{ fontWeight: 'bold' }}>
+      Current Event
+    </Typography>
+    <Typography
+      variant="body1"
+      sx={{ fontWeight: 'light', textAlign: 'center', fontSize: '1.25rem' }} 
+    >
+      {activeEvent || "No active event"}
+    </Typography>
+  </Box>
+
+  {/* Upcoming Event Box */}
+  <Box sx={{ flex: 1, mx: 2, padding: 2, border: '1px solid #ccc', borderRadius: 2, bgcolor: '#f5f5f5' }}>
+    <Typography variant="h5" align="center" gutterBottom sx={{ fontWeight: 'bold' }}>
+      Upcoming Event
+    </Typography>
+    <Typography
+      variant="body1"
+      sx={{ fontWeight: 'light', textAlign: 'center', fontSize: '1.25rem' }} 
+    >
+      {upcomingEvent || "No upcoming event"}
+    </Typography>
+  </Box>
+</Box>
+
 
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <StyledPaper>
-            <Title align="center">Members</Title>
+            <Title align="center">Members Overview</Title>
             <Box
               sx={{
                 display: "flex",
@@ -256,7 +316,7 @@ const FrontDeskHomepage = () => {
 
         <Grid item xs={12} md={4}>
           <StyledPaper>
-            <Title align="center">Children</Title>
+            <Title align="center">Children Overview</Title>
             <Box
               sx={{
                 display: "flex",
@@ -296,7 +356,7 @@ const FrontDeskHomepage = () => {
 
         <Grid item xs={12} md={4}>
           <StyledPaper>
-            <Title align="center">Teens</Title>
+            <Title align="center">Teens Overview</Title>
             <Box
               sx={{
                 display: "flex",
@@ -335,7 +395,7 @@ const FrontDeskHomepage = () => {
         </Grid>
 
         {/* New Chart for Checked In Members */}
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <StyledPaper>
             <Title align="center">Checked-In Members</Title>
             <Box
@@ -359,7 +419,7 @@ const FrontDeskHomepage = () => {
               </Grid>
             </Grid>
           </StyledPaper>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Container>
   );
