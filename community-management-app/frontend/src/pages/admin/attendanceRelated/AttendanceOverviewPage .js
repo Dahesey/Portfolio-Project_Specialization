@@ -29,7 +29,7 @@ const AttendanceOverviewPage = () => {
           <Card sx={{ padding: '20px', borderRadius: '15px', boxShadow: 3 }}>
             <CardContent>
               <Typography variant="h6" align="center">
-                View Monthly Attendance Overview
+                Monthly Attendance Overview
               </Typography>
               <Divider sx={{ my: 2 }} />
               <Box display="flex" justifyContent="center">
@@ -51,7 +51,7 @@ const AttendanceOverviewPage = () => {
           <Card sx={{ padding: '20px', borderRadius: '15px', boxShadow: 3 }}>
             <CardContent>
               <Typography variant="h6" align="center">
-                View Service Attendance Overview
+                Event Attendance Overview
               </Typography>
               <Divider sx={{ my: 2 }} />
               <Box display="flex" justifyContent="center">
@@ -61,7 +61,7 @@ const AttendanceOverviewPage = () => {
                 //   component={Link}
                   onClick={() => navigate('/Admin/attendance/Admin/service-attendance')}
                 >
-                  VIEW SERVICE ATTENDANCE
+                  VIEW EVENT ATTENDANCE
                 </Button>
               </Box>
             </CardContent>

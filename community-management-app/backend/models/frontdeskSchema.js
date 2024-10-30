@@ -14,6 +14,10 @@ const frontdeskSchema = new mongoose.Schema({
         type: String,
         default: "Frontdesk"
     },
+    dateAdded: {
+        type: Date,
+        default: Date.now,
+    },
 
 });
 

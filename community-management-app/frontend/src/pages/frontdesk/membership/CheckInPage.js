@@ -38,7 +38,7 @@ const CheckInPage = () => {
                 backgroundColor: "#00796B",
               },
             }}
-            onClick={() => navigate("/FrontDesk/Membership/Attendance")}
+            onClick={() => navigate("/FrontDesk/Checkin/Attendance")}
           >
             <GroupIcon fontSize="large" />
             <Typography variant="h6">MEMBER CHECK IN</Typography>

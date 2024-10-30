@@ -1,55 +1,48 @@
-import axios from 'axios';
+// frontdeskActions.js
+import axios from "axios";
 import {
     getRequest,
     getSuccess,
     getFailed,
-    getError,
-    stuffDone
-} from './frontdeskSlice';
+    addFrontdeskSuccess,
+    updateFrontdeskSuccess,
+} from "./frontdeskSlice";
 
-export const getAllFrontdesks = (id) => async (dispatch) => {
+const BASE_URL = 'http://localhost:5000';
+
+// Fetch all front desk records
+export const fetchFrontdesks = () => async (dispatch) => {
     dispatch(getRequest());
-
     try {
-        const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/Frontdesks/${id}`);
-        if (result.data.message) {
-            dispatch(getFailed(result.data.message));
-        } else {
-            dispatch(getSuccess(result.data));
-        }
+        const response = await axios.get(`${BASE_URL}/frontdesk`);
+        dispatch(getSuccess(response.data));
     } catch (error) {
-        dispatch(getError(error));
+        dispatch(getFailed(error.message));
     }
-}
+};
 
-export const updateFrontdeskFields = (id, fields, address) => async (dispatch) => {
+// Add a new front desk personnel
+export const addFrontdesk = (frontdeskData) => async (dispatch) => {
     dispatch(getRequest());
-
     try {
-        const result = await axios.put(`${process.env.REACT_APP_BASE_URL}/${address}/${id}`, fields, {
-            headers: { 'Content-Type': 'application/json' },
+        const response = await axios.post(`${BASE_URL}/frontdesk`, frontdeskData, {
+            headers: { "Content-Type": "application/json" },
         });
-        if (result.data.message) {
-            dispatch(getFailed(result.data.message));
-        } else {
-            dispatch(stuffDone());
-        }
+        dispatch(addFrontdeskSuccess(response.data));
     } catch (error) {
-        dispatch(getError(error));
+        dispatch(getFailed(error.message));
     }
-}
+};
 
-export const removeStuff = (id, address) => async (dispatch) => {
+// Update front desk personnel details
+export const updateFrontdesk = (id, updatedData) => async (dispatch) => {
     dispatch(getRequest());
-
     try {
-        const result = await axios.put(`${process.env.REACT_APP_BASE_URL}/${address}/${id}`);
-        if (result.data.message) {
-            dispatch(getFailed(result.data.message));
-        } else {
-            dispatch(stuffDone());
-        }
+        const response = await axios.put(`${BASE_URL}/frontdesk/${id}`, updatedData, {
+            headers: { "Content-Type": "application/json" },
+        });
+        dispatch(updateFrontdeskSuccess(response.data));
     } catch (error) {
-        dispatch(getError(error));
+        dispatch(getFailed(error.message));
     }
-}
+};

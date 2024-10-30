@@ -61,6 +61,15 @@ const memberSchema = new mongoose.Schema({
     branch: {
         type: String,
     },
+    dateAdded: {
+        type: Date,
+        default: Date.now,
+    },
+    lastCheckInDate: {
+        type: Date,
+        default: null 
+    },
+
 });
 
 module.exports = mongoose.model("Member", memberSchema);

@@ -6,14 +6,15 @@ const eventSchema = new mongoose.Schema({
   eventDate: { type: Date, required: true },
   eventDescription: { type: String, required: true },
   location: { type: String, required: true },
-  eventType: { type: String, required: true }, // E.g., service, meeting, outreach
-  attendees: [{ type: mongoose.Schema.Types.ObjectId, ref: "Member" }], // Array of member references
-  checkinCount: { type: Number, default: 0 }, // Optional, could be calculated based on attendees length
-  organizer: { type: String }, // Or reference to a member ID if organizers are members
-  speaker: { type: String }, // Optional field for events with a speaker
-  capacity: { type: Number }, // Optional for events with a capacity limit
-  evenStatus: { type: String, default: "upcoming" }, // Status of the event: upcoming, ongoing, completed
-  tags: [String], // Array of tags for event categorization
+  eventType: { type: String, required: true }, 
+  attendees: [{ type: mongoose.Schema.Types.ObjectId, ref: "Member" }],
+  checkinCount: { type: Number, default: 0 }, 
+  organizer: { type: String }, 
+  speaker: { type: String }, 
+  capacity: { type: Number },
+  evenStatus: { type: String, default: "upcoming" }, 
+  countdown: { type: String, required: true },
+  tags: [String],
 });
 
 module.exports = mongoose.model("Event", eventSchema);
