@@ -12,7 +12,7 @@ import {
     getError,
 } from './userSlice';
 
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = 'http://localhost:5001';
 
 export const loginUser = (fields, role) => async (dispatch) => {
     dispatch(authRequest());
