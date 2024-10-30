@@ -47,8 +47,6 @@ const eventCreate = async (req, res) => {
   };
   
 
-
-
 // Get the latest eventID
 const getLatestEventID = async (req, res) => {
     try {
